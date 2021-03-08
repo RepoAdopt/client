@@ -1,26 +1,22 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <el-container>
+    <el-header class="no-pad">
+      <el-menu mode="horizontal">
+        <el-menu-item index="1">/RepoAdopt/</el-menu-item>
+        <el-menu-item index="2">My matches</el-menu-item>
+      </el-menu>
+    </el-header>
+
+    <router-view />
+  </el-container>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<style lang="scss">
+@import '@/style/default.scss';
+</style>
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss" scoped>
+.no-pad {
+  padding: 0;
 }
 </style>
