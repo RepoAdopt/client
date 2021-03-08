@@ -17,6 +17,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { Octokit } from '@octokit/rest';
+
 import Adoptable from '@/components/Adoptable.vue';
 
 export default defineComponent({
@@ -35,11 +37,17 @@ export default defineComponent({
   },
   methods: {
     load() {
+      const octakit = new Octokit({});
+
+      octakit.repos.getContent({ owner: 'RepoAdopt', repo: 'client', path: 'README.md' }).then((res) => {
+        console.log(res);
+      });
+
       const repo = {
-          repository: 'RepoAdopt/client',
-          description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce suscipit condimentum est nec malesuada. Donec sollicitudin interdum turpis, vel mattis metus sodales sit amet.',
-        }
+        repository: 'RepoAdopt/client',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce suscipit condimentum est nec malesuada. Donec sollicitudin interdum turpis, vel mattis metus sodales sit amet.',
+      };
 
       this.adoptables.push(repo);
       this.adoptables.push(repo);
