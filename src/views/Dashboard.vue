@@ -5,7 +5,7 @@
     <el-col :span="12">
       <ul class="infinite-list" v-infinite-scroll="load" v-if="adoptables">
         <li v-for="(adoptable, index) in adoptables" :key="adoptable.name + index">
-          <Adoptable :name="adoptable.repository" :description="adoptable.description" />
+          <Adoptable :repository="adoptable.repository" :description="adoptable.description" :readme="adoptable.readme" />
         </li>
       </ul>
     </el-col>

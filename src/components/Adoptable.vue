@@ -1,6 +1,8 @@
 <template>
-  <el-card :header="name" shadow="hover" class="card">
-    <p>{{ description }}</p>
+  <el-card :header="repository" shadow="hover" class="card">
+    <p v-if="description.length">{{ description }}</p>
+    <el-divider />
+    <vue3-markdown-it v-if="readme.length" :source="readme" />
   </el-card>
 </template>
 
@@ -10,13 +12,13 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'adoptable',
   props: {
-    name: {
-      type: String,
-    },
     description: {
       type: String,
     },
     repository: {
+      type: String,
+    },
+    readme: {
       type: String,
     },
   },
@@ -25,6 +27,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .card {
-	margin: 16px;
+  margin: 16px;
 }
 </style>
