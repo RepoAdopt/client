@@ -3,7 +3,7 @@
     <el-col :span="6">left</el-col>
 
     <el-col :span="12">
-      <ul class="infinite-list" v-infinite-scroll="load">
+      <ul class="infinite-list" v-infinite-scroll="load" v-if="adoptables">
         <li v-for="(adoptable, index) in adoptables" :key="adoptable.name + index">
           <Adoptable :name="adoptable.repository" :description="adoptable.description" />
         </li>
@@ -16,45 +16,19 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
-import { Octokit } from '@octokit/rest';
+import { mapGetters, mapActions } from 'vuex';
 
 import Adoptable from '@/components/Adoptable.vue';
 
 export default defineComponent({
   name: 'Dashboard',
   components: { Adoptable },
-  data() {
-    return {
-      adoptables: [
-        {
-          repository: 'RepoAdopt/client',
-          description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce suscipit condimentum est nec malesuada. Donec sollicitudin interdum turpis, vel mattis metus sodales sit amet.',
-        },
-      ],
-    };
-  },
+  computed: { ...mapGetters('adoptables', ['adoptables']) },
   methods: {
-    load() {
-      const octakit = new Octokit({});
-
-      octakit.repos.getContent({ owner: 'RepoAdopt', repo: 'client', path: 'README.md' }).then((res) => {
-        console.log(res);
-      });
-
-      const repo = {
-        repository: 'RepoAdopt/client',
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce suscipit condimentum est nec malesuada. Donec sollicitudin interdum turpis, vel mattis metus sodales sit amet.',
-      };
-
-      this.adoptables.push(repo);
-      this.adoptables.push(repo);
-      this.adoptables.push(repo);
-      this.adoptables.push(repo);
-      console.log(this.adoptables.length);
-    },
+    ...mapActions('adoptables', ['load']),
+  },
+  created() {
+    this.load();
   },
 });
 </script>
