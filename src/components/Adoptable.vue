@@ -1,8 +1,8 @@
 <template>
   <el-card :header="repository" shadow="hover" class="card">
-    <p v-if="description.length">{{ description }}</p>
-    <el-divider />
-    <vue3-markdown-it v-if="readme.length" :source="readme" />
+    <p v-if="description?.length">{{ description }}</p>
+    <el-divider v-if="description?.length && readme?.length" />
+    <vue3-markdown-it v-if="readme?.length" :source="readme" />
   </el-card>
 </template>
 

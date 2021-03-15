@@ -1,5 +1,8 @@
 import { Octokit } from '@octokit/rest';
 
+import gql from 'graphql-tag';
+import apollo from '@/apollo';
+
 interface Adoptable {
   repository: string;
   description: string;
@@ -10,7 +13,7 @@ interface State {
   adoptables: Array<Adoptable>;
 }
 
-const octakit = new Octokit({ auth: '7447e40a9ca166610010544a2fafbb6dc10ca015' });
+const octakit = new Octokit({ auth: 'token' });
 
 const state = () => ({
   adoptables: [],
@@ -24,40 +27,43 @@ const getters = {
 
 const actions = {
   load(root: { commit: (mutation: string, params: any) => void }) {
-    const repo = {
-      repository: 'RepoAdopt/client',
-      readme: '',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce suscipit condimentum est nec malesuada. Donec sollicitudin interdum turpis, vel mattis metus sodales sit amet.',
-    };
-
-    const repos = [repo];
-
-    repos.forEach((adoptable) => {
-      const [owner, repo] = adoptable.repository.split('/', 2);
-
-      octakit.repos
-        .getContent({ owner, repo, path: 'README.md' })
-        .then((res) => {
-					// TODO When fixed remove ignore
-          // @ts-ignore: Unreachable code error
-          if (!res?.data?.content) {
-            return;
+    apollo
+      .query({
+        query: gql`
+          query {
+            allAdoptables {
+              repository
+            }
           }
+        `,
+      })
+      .then((result) => {
+        console.log(result);
+        result.data.allAdoptables.forEach((adoptable: Adoptable) => {
+          const [owner, repo] = adoptable.repository.split('/', 2);
 
-          // @ts-ignore: Unreachable code error
-          const readme = atob(res.data.content);
+          octakit.repos
+            .getContent({ owner, repo, path: 'README.md' })
+            .then((res) => {
+              // TODO When fixed remove ignore
+              // @ts-ignore: Unreachable code error
+              if (!res?.data?.content) {
+                return;
+              }
 
-          adoptable.readme = readme;
+              // @ts-ignore: Unreachable code error
+              const readme = atob(res.data.content);
 
-          console.log(adoptable);
-
-          root.commit('addAdoptable', { adoptables: adoptable });
-        })
-        .catch((error) => {
-          console.error(error);
+              adoptable.readme = readme;
+            })
+            .catch((error) => {
+              console.error('myuerror', error);
+            })
+            .finally(() => {
+              root.commit('addAdoptable', { adoptables: adoptable });
+            });
         });
-    });
+      });
   },
 };
 
