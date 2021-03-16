@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container class="container">
     <el-header class="no-pad">
       <el-menu mode="horizontal">
         <el-menu-item index="1">/RepoAdopt/</el-menu-item>
@@ -16,6 +16,11 @@
 </style>
 
 <style lang="scss" scoped>
+.container {
+  width: 100vw;
+  height: 100vh;
+}
+
 .no-pad {
   padding: 0;
 }
