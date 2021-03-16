@@ -1,4 +1,5 @@
 # client
+[![Build Status](https://travis-ci.org/RepoAdopt/client.svg?branch=master)](https://travis-ci.org/RepoAdopt/client)
 
 ## Project setup
 ```
