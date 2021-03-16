@@ -6,4 +6,4 @@ env:
   - TRAVIS_BUILD_DIR=/repoadopt/app
 script:
   - npm install
-  - docker build -f ./dockerfile
+  - docker build -f ./
