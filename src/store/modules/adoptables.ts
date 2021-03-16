@@ -38,7 +38,6 @@ const actions = {
         `,
       })
       .then((result) => {
-        console.log(result);
         result.data.allAdoptables.forEach((adoptable: Adoptable) => {
           const [owner, repo] = adoptable.repository.split('/', 2);
 
