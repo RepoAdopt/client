@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - lts/*
+cache: npm
+env:
+  - TRAVIS_BUILD_DIR=/repoadopt/app
+script:
+  - npm install
+  - npm run build
