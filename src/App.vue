@@ -16,23 +16,74 @@
         </el-row>
       </el-menu>
     </el-header>
-    <CreateAdoptable setDialogFormVisible="dialogFormVisible" v-model="dialogFormVisible"/>
+<!--TODO CHANGE THIS WHEN WHITE SPACE NOT BEING TYPED IN TEXTAREA IN MENU GETS FIXED, DEFINITELY NOT CORRECT!!!    -->
+    <el-dialog v-model="dialogFormVisible" title="Add Adoptable" center>
+      <el-form :model="form">
+        <el-form-item label="Repository" :label-width="formLabelWidth" required>
+          <el-select v-model="form.repository" placeholder="Select repository" filterable>
+            <el-option label="BeauTaapken/DogAdoptionFrontEnd" value="BeauTaapken/DogAdoptionFrontEnd"></el-option>
+            <el-option label="BeauTaapken/DogAdoptionAPI" value="BeauTaapken/DogAdoptionAPI"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Description" :label-width="formLabelWidth">
+          <el-input v-model="form.description" autocomplete="off" type="textarea" resize="none" :rows="10"></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="createAdoptable">Confirm</el-button>
+      </span>
+      </template>
+    </el-dialog>
     <router-view />
   </el-container>
 </template>
 
 <script>
-  import CreateAdoptable from "@/components/CreateAdoptable.vue";
-  import {defineComponent} from "vue";
+import {defineComponent} from "vue";
+import apollo from "@/apollo";
+import gql from "graphql-tag";
 
-  export default defineComponent({
-    components: { CreateAdoptable },
-    data() {
-      return {
-        dialogFormVisible: false
-      };
+export default defineComponent({
+  name: "CreateAdoptable",
+  props: {
+    open: Boolean
+  },
+  data() {
+    return {
+      dialogFormVisible: false,
+      form: {
+        repository: '',
+        description: '',
+      },
+      formLabelWidth: '120px'
+    };
+  },
+  methods: {
+    createAdoptable: function () {
+      console.log(this.form.repository)
+      console.log(this.form.description)
+      apollo
+          .query({
+            query: gql`
+          query($repository: String!, $description: String!) {
+            adoptable(repository: $repository, description: $description) {
+              repository
+            }
+          }
+        `,
+            variables: { repository: this.form.repository, description: this.form.description },
+          })
+          .then((result) => {
+            console.log(result)
+          })
+          .catch((err) => {
+            console.log(err)
+          });
     }
-  });
+  }
+});
 </script>
 
 <style lang="scss">
