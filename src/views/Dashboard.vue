@@ -38,22 +38,5 @@ export default defineComponent({
   margin: 0 10px;
   overflow: auto;
   max-height: 90vh;
-
-  &::-webkit-scrollbar-track {
-    display: none;
-  }
-
-  &::-webkit-scrollbar {
-    width: 12px;
-  }
-
-  &::-webkit-scrollbar-button {
-    display: none;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: grey;
-    border-radius: 16px;
-  }
 }
 </style>
