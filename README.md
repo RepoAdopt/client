@@ -1,5 +1,7 @@
 # client
 
+[![RepoAdopt](https://circleci.com/gh/RepoAdopt/client/tree/develop.svg?style=shield)](https://circleci.com/gh/RepoAdopt/client)
+
 ## Project setup
 ```
 npm install
