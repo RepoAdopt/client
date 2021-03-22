@@ -4,7 +4,7 @@ import Dashboard from '../views/Dashboard.vue';
 import LogIn from '../views/LogIn.vue';
 
 const routes: Array<RouteRecordRaw> = [
-  // { path: '/:any*', redirect: { name: 'Dashboard' } },
+  { path: '/:any*', redirect: { name: 'Dashboard' } },
   {
     path: '/dashboard',
     name: 'Dashboard',
