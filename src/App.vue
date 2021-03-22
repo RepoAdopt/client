@@ -16,9 +16,7 @@
           </el-col>
 
           <el-row :span="8" justify="end">
-            <el-menu-item index="2">
-              <router-link :to="{ name: 'LogIn' }">Log in</router-link>
-            </el-menu-item>
+            <SignIn />
           </el-row>
         </el-row>
       </el-menu>
@@ -50,7 +48,10 @@ import { defineComponent } from 'vue';
 import apollo from '@/apollo';
 import gql from 'graphql-tag';
 
+import SignIn from '@/components/SignIn.vue';
+
 export default defineComponent({
+  components: { SignIn },
   data() {
     return {
       dialogFormVisible: false,
