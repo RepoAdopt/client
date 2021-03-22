@@ -15,7 +15,7 @@ interface State {
   fetching: boolean;
 }
 
-const octakit = new Octokit({ auth: 'token' });
+const octakit = new Octokit({ auth: process.env.VUE_APP_TOKEN });
 
 const state = () => ({
   adoptables: [],
