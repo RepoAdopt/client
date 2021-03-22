@@ -1,4 +1,5 @@
 # client
+[![Build Status](https://travis-ci.org/RepoAdopt/client.svg?branch=master)](https://travis-ci.org/RepoAdopt/client)
 
 [![RepoAdopt](https://circleci.com/gh/RepoAdopt/client/tree/develop.svg?style=shield)](https://circleci.com/gh/RepoAdopt/client)
 
