@@ -62,20 +62,23 @@ export default defineComponent({
   },
   methods: {
     createAdoptable: function () {
-      console.log(this.form.repository)
-      console.log(this.form.description)
       apollo
-          .query({
-            query: gql`
-          query($repository: String!, $description: String!) {
-            adoptable(repository: $repository, description: $description) {
-              repository
+          .mutate({
+            mutation: gql`
+          mutation($repository: String!, $description: String!)  {
+            createAdoptable(repository: $repository description: $description) {
+              adoptable {
+                id
+              }
             }
           }
         `,
             variables: { repository: this.form.repository, description: this.form.description },
           })
           .then((result) => {
+            this.dialogFormVisible = false
+            this.form.repository = ""
+            this.form.description = ""
             console.log(result)
           })
           .catch((err) => {
