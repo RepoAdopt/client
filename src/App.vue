@@ -30,26 +30,20 @@
         </el-form-item>
       </el-form>
       <template #footer>
-      <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Cancel</el-button>
         <el-button type="primary" @click="createAdoptable">Confirm</el-button>
-      </span>
       </template>
     </el-dialog>
     <router-view />
   </el-container>
 </template>
 
-<script>
+<script lang="ts">
 import {defineComponent} from "vue";
 import apollo from "@/apollo";
 import gql from "graphql-tag";
 
 export default defineComponent({
-  name: "CreateAdoptable",
-  props: {
-    open: Boolean
-  },
   data() {
     return {
       dialogFormVisible: false,
