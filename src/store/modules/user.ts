@@ -1,6 +1,6 @@
 import Octokit from '@/octokit';
 
-interface User {
+export interface User {
   avatar_url: string;
   bio: string;
   blog: string;
@@ -41,7 +41,7 @@ interface State {
 
 interface Root {
   commit: (mutation: string, params?: any) => void;
-  dispatch: (action: string, params?: {}) => void;
+  dispatch: (action: string, params?: {}, options?: {}) => void;
   state: State;
 }
 
@@ -76,8 +76,9 @@ const actions = {
       .users.getAuthenticated()
       .then((res) => {
         root.commit('setUser', { user: res.data });
+        root.dispatch('repository/init',  {}, {root:true})
       });
-  },
+  }
 };
 
 const mutations = {

@@ -30,6 +30,10 @@
       <el-form :model="form">
         <el-form-item label="Repository" :label-width="formLabelWidth" required>
           <el-select v-model="form.repository" placeholder="Select repository" filterable>
+<!--            TODO MAKE THIS SHIT WORK-->
+<!--            <el-option v-for="items in repositories" :key="id">-->
+<!--              {{ items }}-->
+<!--            </el-option>-->
             <el-option label="BeauTaapken/DogAdoptionFrontEnd" value="BeauTaapken/DogAdoptionFrontEnd"></el-option>
             <el-option label="BeauTaapken/DogAdoptionAPI" value="BeauTaapken/DogAdoptionAPI"></el-option>
           </el-select>
@@ -62,21 +66,20 @@ export default defineComponent({
   components: { SignIn },
   computed: {
     ...mapGetters('user', ['githubToken', 'user']),
-    ...mapGetters('repository', ['username', 'repositories'])
+    ...mapGetters('repository', ['repositories'])
   },
   data() {
     return {
       dialogFormVisible: false,
       form: {
-        repository: '',
+        repository: '' || null,
         description: '',
       },
       formLabelWidth: '120px',
     };
   },
   methods: {
-    ...mapActions('user', ['init']),
-    ...mapActions('repository', ['init']),
+    ...mapActions('user', {userstoreInit: 'init'}),
     createAdoptable: function() {
       apollo
         .mutate({
@@ -93,24 +96,34 @@ export default defineComponent({
         })
         .then(() => {
           this.dialogFormVisible = false;
-          this.form.repository = '';
-          this.form.description = '';
+          this.form.repository = null;
+          this.form.description = "";
+          this.showSuccess("Succefully added repository", "Your repository has been added to RepoAdopt")
         })
-        .catch((err) => {
-          this.showError(err);
+        .catch(() => {
+          console.log(this.form.repository)
+          this.showError("Could not add", "Select a repository from the dropdown");
         });
     },
-    showError: function(message: string) {
+    showError: function(title: string, message: string) {
       ElNotification({
-        title: 'Error',
+        title: title,
         message: message,
         position: 'bottom-right',
         type: 'error'
       })
     },
+    showSuccess: function (title: string, message: string) {
+      ElNotification({
+        title: title,
+        message: message,
+        position: 'bottom-right',
+        type: 'success'
+      })
+    }
   },
   created() {
-    this.init();
+    this.userstoreInit();
   },
 });
 </script>

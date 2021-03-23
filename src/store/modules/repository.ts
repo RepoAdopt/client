@@ -1,9 +1,81 @@
 import Octokit from '@/octokit';
-import user from './user'
+import User from './user'
 
 interface Repository {
-  name: string;
-  url: string;
+  archive_url: string
+  archived: boolean
+  assignees_url: string
+  blobs_url: string
+  branches_url: string
+  clone_url: string
+  collaborators_url: string
+  comments_url: string
+  commits_url: string
+  compare_url: string
+  contents_url: string
+  contributors_url: string
+  created_at: string
+  default_branch: string
+  deployments_url: string
+  description: string | null
+  disabled: boolean
+  downloads_url: string
+  events_url: string
+  fork: boolean
+  forks: number
+  forks_count: number
+  forks_url: string
+  full_name: string
+  git_commits_url: string
+  git_refs_url: string
+  git_tags_url: string
+  git_url: string
+  has_downloads: boolean
+  has_issues: boolean
+  has_pages: boolean
+  has_projects: boolean
+  has_wiki: boolean
+  homepage: string | null
+  hooks_url: string
+  html_url: string
+  id: number
+  issue_comment_url: string
+  issue_events_url: string
+  issues_url: string
+  keys_url: string
+  labels_url: string
+  language: string
+  languages_url: string
+  license: string | null
+  merges_url: string
+  milestones_url: string
+  mirror_url: string | null
+  name: string
+  node_id: string
+  notifications_url: string
+  open_issues: number
+  open_issues_count: number
+  owner: typeof User
+  permissions: {admin: true, push: true, pull: true}
+  private: false
+  pulls_url: string
+  pushed_at: Date
+  releases_url: string
+  size: number
+  ssh_url: string
+  stargazers_count: number
+  stargazers_url: string
+  statuses_url: string
+  subscribers_url: string
+  subscription_url: string
+  svn_url: string
+  tags_url: string
+  teams_url: string
+  trees_url: string
+  updated_at: string
+  url: string
+  watchers: number
+  watchers_count: number
 }
 interface State {
   username: string;
@@ -14,7 +86,7 @@ interface Root {
   commit: (mutation: string, params?: any) => void;
   dispatch: (action: string, params?: {}) => void;
   state: State;
-  rootGetters: {};
+  rootGetters: { 'user/user': ['user/user'] };
 }
 
 const state = {
@@ -32,26 +104,28 @@ const getters = {
 };
 
 const actions = {
-  // @ts-ignore: Unreachable code error
   init(root: Root) {
-    console.log(root.rootGetters)
-    // console.log(rootGetter.user().name)
-    const username = user.getters ?? '';
-    console.log(username)
+    // @ts-ignore
+    const username = root.rootGetters['user/user'].login ?? '';
+    if (username) {
+      root.dispatch('loadRepositories', { username });
+    }
   },
-  // loadRepositories(root: Root) {
-  //   Octokit.repos.listForUser({}).then((res) => {
-  //     console.log(res);
-  //     root.commit('setUser', { user: res.data });
-  //   });
-  // },
+  loadRepositories(root: Root, params: { username: string }) {
+    Octokit().repos.listForUser({'username': params.username}).then((res) => {
+      root.commit('setRepositories', { repositories: res.data });
+    });
+  },
 };
 
 const mutations = {
-  // setRepositories(state: State, params: { repositories: [Repository] }) {
-  //   state.user = params.user;
-  // },
+  setRepositories(state: State, params: { repositories: [Repository] } ) {
+    state.repositories = params.repositories;
+    console.log(state.repositories)
+  },
 };
+
+
 
 export default {
   namespaced: true,
