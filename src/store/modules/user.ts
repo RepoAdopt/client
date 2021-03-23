@@ -1,5 +1,7 @@
 import Octokit from '@/octokit';
 
+import Router from '@/router';
+
 interface User {
   avatar_url: string;
   bio: string;
@@ -68,8 +70,9 @@ const actions = {
     }
   },
   logout(root: Root) {
-		localStorage.removeItem('githubToken');
-	},
+    localStorage.removeItem('githubToken');
+		Router.go(0);
+  },
   setGithubToken(root: Root, params: { token: string }) {
     root.commit('setToken', { token: params.token });
     root.dispatch('loadUserData');

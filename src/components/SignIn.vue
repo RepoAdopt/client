@@ -24,7 +24,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .button {
-  margin: 10px;
+  margin: 4px 10px;
 }
 
 .text {
