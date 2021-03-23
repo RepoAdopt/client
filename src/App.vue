@@ -16,9 +16,11 @@
           </el-col>
 
           <el-row :span="8" justify="end">
-            {{ githubToken }}
-            {{ user }}
-            <SignIn />
+            <SignIn v-if="!githubToken || !user" />
+            <el-row align="middle" type="flex" v-else>
+              {{ user.login }}
+              <el-avatar class="avatar" :src="user.avatar_url" />
+            </el-row>
           </el-row>
         </el-row>
       </el-menu>
@@ -125,5 +127,9 @@ export default defineComponent({
 
 .margin-top-bottom {
   margin: 10px 0;
+}
+
+.avatar {
+  margin: 10px;
 }
 </style>
