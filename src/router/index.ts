@@ -22,7 +22,6 @@ router.beforeEach((to, from, next) => {
         },
       }
     ).then((res) => {
-      console.log(res);
       Store.dispatch('user/setGithubToken', { token: res?.data?.access_token?.[0] });
     });
 

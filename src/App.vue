@@ -81,14 +81,13 @@ export default defineComponent({
           `,
           variables: { repository: this.form.repository, description: this.form.description },
         })
-        .then((result) => {
+        .then(() => {
           this.dialogFormVisible = false;
           this.form.repository = '';
           this.form.description = '';
-          console.log(result);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     },
   },
