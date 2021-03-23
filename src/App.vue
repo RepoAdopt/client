@@ -16,6 +16,7 @@
           </el-col>
 
           <el-row :span="8" justify="end">
+            {{ githubToken }}
             <SignIn />
           </el-row>
         </el-row>
@@ -45,6 +46,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapGetters } from 'vuex';
+
 import apollo from '@/apollo';
 import gql from 'graphql-tag';
 
@@ -52,6 +55,7 @@ import SignIn from '@/components/SignIn.vue';
 
 export default defineComponent({
   components: { SignIn },
+  computed: { ...mapGetters('user', ['githubToken']) },
   data() {
     return {
       dialogFormVisible: false,

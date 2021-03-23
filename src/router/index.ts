@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import Api from '@/api';
+import Store from '@/store';
 
 import routes from './routes';
 
@@ -22,6 +23,7 @@ router.beforeEach((to, from, next) => {
       }
     ).then((res) => {
       console.log(res);
+      Store.dispatch('user/setGithubToken', { token: res?.data?.access_token?.[0] });
     });
 
     delete to.query.code;
