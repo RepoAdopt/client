@@ -48,6 +48,8 @@
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 
+import { ElNotification } from 'element-plus'
+
 import apollo from '@/apollo';
 import gql from 'graphql-tag';
 
@@ -88,7 +90,16 @@ export default defineComponent({
         })
         .catch((err) => {
           console.error(err);
+          this.showError(err)
         });
+    },
+    showError: function(message: string) {
+      ElNotification({
+        title: 'Error',
+        message: message,
+        position: 'bottom-right',
+        type: 'error'
+      })
     },
   },
 });
