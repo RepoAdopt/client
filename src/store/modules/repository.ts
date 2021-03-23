@@ -1,5 +1,5 @@
 import Octokit from '@/octokit';
-import getters from './user'
+import user from './user'
 
 interface Repository {
   name: string;
@@ -14,6 +14,7 @@ interface Root {
   commit: (mutation: string, params?: any) => void;
   dispatch: (action: string, params?: {}) => void;
   state: State;
+  rootGetters: {};
 }
 
 const state = {
@@ -23,7 +24,7 @@ const state = {
 
 const getters = {
   username: (state: State) => {
-    return state
+    return state.username;
   },
   repositories: (state: State) => {
     return state.repositories;
@@ -31,29 +32,25 @@ const getters = {
 };
 
 const actions = {
+  // @ts-ignore: Unreachable code error
   init(root: Root) {
-    const token = user.getters.user() ?? false;
-
-    if (token) {
-      root.dispatch('setGithubToken', { token });
-    }
+    console.log(root.rootGetters)
+    // console.log(rootGetter.user().name)
+    const username = user.getters ?? '';
+    console.log(username)
   },
-  loadRepositories(root: Root) {
-    Octokit.repos.listForUser({}).then((res) => {
-      console.log(res);
-      root.commit('setUser', { user: res.data });
-    });
-  },
+  // loadRepositories(root: Root) {
+  //   Octokit.repos.listForUser({}).then((res) => {
+  //     console.log(res);
+  //     root.commit('setUser', { user: res.data });
+  //   });
+  // },
 };
 
 const mutations = {
-  setToken(state: State, params: { token: string }) {
-    state.githubToken = params.token;
-    localStorage.setItem('githubToken', params.token);
-  },
-  setUser(state: State, params: { user: User }) {
-    state.user = params.user;
-  },
+  // setRepositories(state: State, params: { repositories: [Repository] }) {
+  //   state.user = params.user;
+  // },
 };
 
 export default {

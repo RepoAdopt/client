@@ -60,7 +60,10 @@ import SignIn from '@/components/SignIn.vue';
 
 export default defineComponent({
   components: { SignIn },
-  computed: { ...mapGetters('user', ['githubToken', 'user']) },
+  computed: {
+    ...mapGetters('user', ['githubToken', 'user']),
+    ...mapGetters('repository', ['username', 'repositories'])
+  },
   data() {
     return {
       dialogFormVisible: false,
@@ -73,6 +76,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('user', ['init']),
+    ...mapActions('repository', ['init']),
     createAdoptable: function() {
       apollo
         .mutate({
