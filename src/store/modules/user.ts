@@ -46,7 +46,7 @@ interface Root {
 }
 
 const state = {
-  githubToken: localStorage.getItem('githubToken') ?? false,
+  githubToken: false,
   user: null,
 };
 
@@ -60,6 +60,13 @@ const getters = {
 };
 
 const actions = {
+  init(root: Root) {
+    const token = localStorage.getItem('githubToken') ?? false;
+
+    if (token) {
+      root.dispatch('setGithubToken', { token });
+    }
+  },
   setGithubToken(root: Root, params: { token: string }) {
     root.commit('setToken', { token: params.token });
     root.dispatch('loadUserData');

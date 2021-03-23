@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import apollo from '@/apollo';
 import gql from 'graphql-tag';
@@ -68,6 +68,7 @@ export default defineComponent({
     };
   },
   methods: {
+    ...mapActions('user', ['init']),
     createAdoptable: function() {
       apollo
         .mutate({
@@ -91,6 +92,9 @@ export default defineComponent({
           console.error(err);
         });
     },
+  },
+  created() {
+    this.init();
   },
 });
 </script>
