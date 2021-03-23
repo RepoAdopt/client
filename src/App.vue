@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="8">
             <el-row justify="center">
-              <el-button type="primary" class="margin-top-bottom" @click="dialogFormVisible = true">Add Adoptable</el-button>
+              <el-button type="primary" class="margin-top-bottom" @click="dialogFormVisible = true" v-if="githubToken">Add Adoptable</el-button>
             </el-row>
           </el-col>
 
