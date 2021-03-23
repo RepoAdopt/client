@@ -3,7 +3,7 @@ interface State {
 }
 
 const state = {
-  githubToken: false,
+  githubToken: localStorage.getItem('githubToken') ?? false,
 };
 
 const getters = {
@@ -13,7 +13,7 @@ const getters = {
 };
 
 const actions = {
-  setGithubToken(root: { commit: (mutation: string, params?: any) => void; state: State }, params: {token: string}) {
+  setGithubToken(root: { commit: (mutation: string, params?: any) => void; state: State }, params: { token: string }) {
     root.commit('setToken', { token: params.token });
   },
 };
@@ -21,6 +21,7 @@ const actions = {
 const mutations = {
   setToken(state: State, params: { token: string }) {
     state.githubToken = params.token;
+    localStorage.setItem('githubToken', params.token);
   },
 };
 
