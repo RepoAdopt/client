@@ -1,12 +1,12 @@
 <template>
-  <el-button class="button">
-    <el-row align="middle" type="flex">
-      <el-image class="icon" src="https://github.githubassets.com/pinned-octocat.svg" />
-      <a class="text" :href="link">
+  <a class="button" :href="link">
+    <el-button>
+      <el-row align="middle" type="flex">
+        <el-image class="icon" src="https://github.githubassets.com/pinned-octocat.svg" />
         Sign in with GitHub
-      </a>
-    </el-row>
-  </el-button>
+      </el-row>
+    </el-button>
+  </a>
 </template>
 
 <script lang="ts">
