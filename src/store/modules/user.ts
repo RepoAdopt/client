@@ -72,10 +72,11 @@ const actions = {
     root.dispatch('loadUserData');
   },
   loadUserData(root: Root) {
-    Octokit.users.getAuthenticated().then((res) => {
-      console.log(res);
-      root.commit('setUser', { user: res.data });
-    });
+    Octokit()
+      .users.getAuthenticated()
+      .then((res) => {
+        root.commit('setUser', { user: res.data });
+      });
   },
 };
 
