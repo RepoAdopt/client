@@ -67,6 +67,9 @@ const actions = {
       root.dispatch('setGithubToken', { token });
     }
   },
+  logout(root: Root) {
+		localStorage.removeItem('githubToken');
+	},
   setGithubToken(root: Root, params: { token: string }) {
     root.commit('setToken', { token: params.token });
     root.dispatch('loadUserData');

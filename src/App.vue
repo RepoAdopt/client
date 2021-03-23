@@ -25,7 +25,7 @@
               </el-row>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item>Logout</el-dropdown-item>
+                  <el-dropdown-item @click="logout()">Logout</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -78,7 +78,7 @@ export default defineComponent({
     };
   },
   methods: {
-    ...mapActions('user', ['init']),
+    ...mapActions('user', ['init', 'logout']),
     createAdoptable: function() {
       apollo
         .mutate({
@@ -105,6 +105,7 @@ export default defineComponent({
   },
   created() {
     this.init();
+    console.log(this);
   },
 });
 </script>
