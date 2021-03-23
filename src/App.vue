@@ -17,6 +17,7 @@
 
           <el-row :span="8" justify="end">
             {{ githubToken }}
+            {{ user }}
             <SignIn />
           </el-row>
         </el-row>
@@ -55,7 +56,7 @@ import SignIn from '@/components/SignIn.vue';
 
 export default defineComponent({
   components: { SignIn },
-  computed: { ...mapGetters('user', ['githubToken']) },
+  computed: { ...mapGetters('user', ['githubToken', 'user']) },
   data() {
     return {
       dialogFormVisible: false,
