@@ -17,10 +17,18 @@
 
           <el-row :span="8" justify="end">
             <SignIn v-if="!githubToken || !user" />
-            <el-row align="middle" type="flex" v-else>
-              {{ user.login }}
-              <el-avatar class="avatar" :src="user.avatar_url" />
-            </el-row>
+            <el-dropdown trigger="click" v-else>
+              <el-row align="middle" type="flex">
+                {{ user.login }}
+                <el-avatar class="avatar" :src="user.avatar_url" />
+                <i class="el-icon-arrow-down el-icon--right icon" />
+              </el-row>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>Logout</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </el-row>
         </el-row>
       </el-menu>
@@ -117,6 +125,10 @@ export default defineComponent({
 
 .margin-top-bottom {
   margin: 10px 0;
+}
+
+.icon {
+  margin: 0 10px 0 0;
 }
 
 .avatar {
