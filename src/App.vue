@@ -91,8 +91,7 @@ export default defineComponent({
           this.form.description = '';
         })
         .catch((err) => {
-          console.error(err);
-          this.showError(err)
+          this.showError(err);
         });
     },
     showError: function(message: string) {
