@@ -17,6 +17,7 @@
 
           <el-row :span="8" justify="end">
             {{ githubToken }}
+            {{ user }}
             <SignIn />
           </el-row>
         </el-row>
@@ -46,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import { ElNotification } from 'element-plus'
 
@@ -57,7 +58,7 @@ import SignIn from '@/components/SignIn.vue';
 
 export default defineComponent({
   components: { SignIn },
-  computed: { ...mapGetters('user', ['githubToken']) },
+  computed: { ...mapGetters('user', ['githubToken', 'user']) },
   data() {
     return {
       dialogFormVisible: false,
@@ -69,6 +70,7 @@ export default defineComponent({
     };
   },
   methods: {
+    ...mapActions('user', ['init']),
     createAdoptable: function() {
       apollo
         .mutate({
@@ -101,6 +103,9 @@ export default defineComponent({
         type: 'error'
       })
     },
+  },
+  created() {
+    this.init();
   },
 });
 </script>

@@ -1,7 +1,7 @@
-import { Octokit } from '@octokit/rest';
-
 import gql from 'graphql-tag';
-import apollo from '@/apollo';
+
+import Apollo from '@/apollo';
+import Octokit from '@/octokit';
 
 interface Adoptable {
   repository: string;
@@ -14,8 +14,6 @@ interface State {
   page: number;
   fetching: boolean;
 }
-
-const octakit = new Octokit({ auth: process.env.VUE_APP_TOKEN });
 
 const state = () => ({
   adoptables: [],
@@ -37,7 +35,7 @@ const actions = {
 
     root.commit('startFetch');
 
-    apollo
+    Apollo
       .query({
         query: gql`
           query($page: Int!, $limit: Int!) {
@@ -55,7 +53,7 @@ const actions = {
         result.data.adoptable.forEach((adoptable: Adoptable) => {
           const [owner, repo] = adoptable.repository.split('/', 2);
 
-          octakit.repos
+          Octokit.repos
             .getContent({ owner, repo, path: 'README.md' })
             .then((res) => {
               // TODO When fixed remove ignore
