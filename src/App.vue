@@ -105,7 +105,6 @@ export default defineComponent({
   },
   created() {
     this.init();
-    console.log(this);
   },
 });
 </script>
