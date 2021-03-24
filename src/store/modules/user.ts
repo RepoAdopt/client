@@ -1,8 +1,9 @@
 import Octokit from '@/octokit';
 
+
 import Router from '@/router';
 
-interface User {
+export interface User {
   avatar_url: string;
   bio: string;
   blog: string;
@@ -35,7 +36,24 @@ interface User {
   type: string;
   updated_at: string;
   url: string;
+  orgs: Orgs;
 }
+
+export interface Orgs {
+  avatar_url: string
+  description: string
+  events_url: string
+  hooks_url: string
+  id: number
+  issues_url: string
+  login: string
+  members_url: string
+  node_id: string
+  public_members_url: string
+  repos_url: string
+  url: string
+}
+
 interface State {
   githubToken: boolean | string;
   user: User;
@@ -43,7 +61,7 @@ interface State {
 
 interface Root {
   commit: (mutation: string, params?: any) => void;
-  dispatch: (action: string, params?: {}) => void;
+  dispatch: (action: string, params?: {}, options?: {}) => void;
   state: State;
 }
 
@@ -80,10 +98,14 @@ const actions = {
   loadUserData(root: Root) {
     Octokit()
       .users.getAuthenticated()
-      .then((res) => {
-        root.commit('setUser', { user: res.data });
+      .then((userRes) => {
+        root.commit('setUser', { user: userRes.data });
+        Octokit().orgs.listForUser({ 'username': userRes.data.login }).then((orgsRes) => {
+          root.commit('setOrgs', { user: orgsRes.data });
+          root.dispatch('repository/init',  {}, {root:true})
+        })
       });
-  },
+  }
 };
 
 const mutations = {
@@ -94,6 +116,9 @@ const mutations = {
   setUser(state: State, params: { user: User }) {
     state.user = params.user;
   },
+  setOrgs(state: State, params: { orgs: Orgs }){
+    state.user.orgs = params.orgs
+  }
 };
 
 export default {
