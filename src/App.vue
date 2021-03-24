@@ -31,9 +31,9 @@
         <el-form-item label="Repository" :label-width="formLabelWidth" required>
           <el-select v-model="form.repository" placeholder="Select repository" filterable>
 <!--            TODO MAKE THIS SHIT WORK-->
-<!--            <el-option v-for="items in repositories" :key="id">-->
-<!--              {{ items }}-->
-<!--            </el-option>-->
+              <el-option v-for="{id, full_name} in repositories" :key="id" value={{full_name}}>
+                {{ full_name }}
+              </el-option>
             <el-option label="BeauTaapken/DogAdoptionFrontEnd" value="BeauTaapken/DogAdoptionFrontEnd"></el-option>
             <el-option label="BeauTaapken/DogAdoptionAPI" value="BeauTaapken/DogAdoptionAPI"></el-option>
           </el-select>
