@@ -99,8 +99,9 @@ const actions = {
     Octokit()
       .users.getAuthenticated()
       .then((userRes) => {
+        root.commit('setUser', { user: userRes.data });
         Octokit().orgs.listForUser({ 'username': userRes.data.login }).then((orgsRes) => {
-          root.commit('setUser', { user: userRes.data, orgs: orgsRes.data });
+          root.commit('setOrgs', { user: orgsRes.data });
           root.dispatch('repository/init',  {}, {root:true})
         })
       });
@@ -112,10 +113,12 @@ const mutations = {
     state.githubToken = params.token;
     localStorage.setItem('githubToken', params.token);
   },
-  setUser(state: State, params: { user: User, orgs: Orgs }) {
+  setUser(state: State, params: { user: User }) {
     state.user = params.user;
-    state.user.orgs = params.orgs
   },
+  setOrgs(state: State, params: { orgs: Orgs }){
+    state.user.orgs = params.orgs
+  }
 };
 
 export default {

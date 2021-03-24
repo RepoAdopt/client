@@ -77,7 +77,7 @@ export default defineComponent({
     return {
       dialogFormVisible: false,
       form: {
-        repository: '' || null,
+        repository: null,
         description: '',
       },
       formLabelWidth: '120px',
@@ -106,7 +106,6 @@ export default defineComponent({
           this.showSuccess("Succefully added repository", "Your repository has been added to RepoAdopt")
         })
         .catch(() => {
-          console.log(this.form.repository)
           this.showError("Could not add", "Select a repository from the dropdown");
         });
     },
