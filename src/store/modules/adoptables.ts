@@ -1,7 +1,7 @@
-import { Octokit } from '@octokit/rest';
-
 import gql from 'graphql-tag';
-import apollo from '@/apollo';
+
+import Apollo from '@/apollo';
+import Octokit from '@/octokit';
 
 interface Adoptable {
   repository: string;
@@ -14,8 +14,6 @@ interface State {
   page: number;
   fetching: boolean;
 }
-
-const octakit = new Octokit({ auth: process.env.VUE_APP_TOKEN });
 
 const state = () => ({
   adoptables: [],
@@ -37,17 +35,16 @@ const actions = {
 
     root.commit('startFetch');
 
-    apollo
-      .query({
-        query: gql`
-          query($page: Int!, $limit: Int!) {
-            adoptable(page: $page, limit: $limit) {
-              repository
-            }
+    Apollo.query({
+      query: gql`
+        query($page: Int!, $limit: Int!) {
+          adoptable(page: $page, limit: $limit) {
+            repository
           }
-        `,
-        variables: { page: root.state.page, limit: process.env.VUE_APP_PAGINATION_LIMIT },
-      })
+        }
+      `,
+      variables: { page: root.state.page, limit: process.env.VUE_APP_PAGINATION_LIMIT },
+    })
       .then((result) => {
         root.commit('incrementPage');
         root.commit('finishFetch');
@@ -55,8 +52,8 @@ const actions = {
         result.data.adoptable.forEach((adoptable: Adoptable) => {
           const [owner, repo] = adoptable.repository.split('/', 2);
 
-          octakit.repos
-            .getContent({ owner, repo, path: 'README.md' })
+          Octokit()
+            .repos.getContent({ owner, repo, path: 'README.md' })
             .then((res) => {
               // TODO When fixed remove ignore
               // @ts-ignore: Unreachable code error

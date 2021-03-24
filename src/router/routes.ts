@@ -8,7 +8,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
-  },
+  }
 ];
 
 export default routes;

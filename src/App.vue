@@ -1,22 +1,39 @@
 <template>
   <el-container class="container">
     <el-header class="no-pad">
-      <el-menu  mode="horizontal">
+      <el-menu mode="horizontal">
         <el-row type="flex" justify="space-between">
           <el-col :span="8">
             <el-row>
-              <el-menu-item index="1">/RepoAdopt/</el-menu-item>
-              <el-menu-item index="2">My matches</el-menu-item>
+              <el-menu-item index="0">/RepoAdopt/</el-menu-item>
+              <el-menu-item index="1">My matches</el-menu-item>
             </el-row>
           </el-col>
-          <el-row :span="8">
-            <el-button type="primary" class="margin-top-bottom" @click="dialogFormVisible = true">Add Adoptable</el-button>
+          <el-col :span="8">
+            <el-row justify="center">
+              <el-button type="primary" class="margin-top-bottom" @click="dialogFormVisible = true" v-if="githubToken">Add Adoptable</el-button>
+            </el-row>
+          </el-col>
+
+          <el-row :span="8" justify="end">
+            <SignIn v-if="!githubToken || !user" />
+            <el-dropdown trigger="click" v-else>
+              <el-row align="middle" type="flex">
+                {{ user.login }}
+                <el-avatar class="avatar" :src="user.avatar_url" />
+                <i class="el-icon-arrow-down el-icon--right icon" />
+              </el-row>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="logout()">Logout</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </el-row>
-          <el-col :span="8"/>
         </el-row>
       </el-menu>
     </el-header>
-<!--TODO CHANGE THIS WHEN WHITE SPACE NOT BEING TYPED IN TEXTAREA IN MENU GETS FIXED, DEFINITELY NOT CORRECT!!!    -->
+    <!--TODO CHANGE THIS WHEN WHITE SPACE NOT BEING TYPED IN TEXTAREA IN MENU GETS FIXED, DEFINITELY NOT CORRECT!!!    -->
     <el-dialog v-model="dialogFormVisible" title="Add Adoptable" center>
       <el-form :model="form">
         <el-form-item label="Repository" :label-width="formLabelWidth" required>
@@ -39,11 +56,17 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import apollo from "@/apollo";
-import gql from "graphql-tag";
+import { defineComponent } from 'vue';
+import { mapGetters, mapActions } from 'vuex';
+
+import apollo from '@/apollo';
+import gql from 'graphql-tag';
+
+import SignIn from '@/components/SignIn.vue';
 
 export default defineComponent({
+  components: { SignIn },
+  computed: { ...mapGetters('user', ['githubToken', 'user']) },
   data() {
     return {
       dialogFormVisible: false,
@@ -51,35 +74,38 @@ export default defineComponent({
         repository: '',
         description: '',
       },
-      formLabelWidth: '120px'
+      formLabelWidth: '120px',
     };
   },
   methods: {
-    createAdoptable: function () {
+    ...mapActions('user', ['init', 'logout']),
+    createAdoptable: function() {
       apollo
-          .mutate({
-            mutation: gql`
-          mutation($repository: String!, $description: String!)  {
-            createAdoptable(repository: $repository description: $description) {
-              adoptable {
-                id
+        .mutate({
+          mutation: gql`
+            mutation($repository: String!, $description: String!) {
+              createAdoptable(repository: $repository, description: $description) {
+                adoptable {
+                  id
+                }
               }
             }
-          }
-        `,
-            variables: { repository: this.form.repository, description: this.form.description },
-          })
-          .then((result) => {
-            this.dialogFormVisible = false
-            this.form.repository = ""
-            this.form.description = ""
-            console.log(result)
-          })
-          .catch((err) => {
-            console.log(err)
-          });
-    }
-  }
+          `,
+          variables: { repository: this.form.repository, description: this.form.description },
+        })
+        .then(() => {
+          this.dialogFormVisible = false;
+          this.form.repository = '';
+          this.form.description = '';
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+  },
+  created() {
+    this.init();
+  },
 });
 </script>
 
@@ -99,5 +125,13 @@ export default defineComponent({
 
 .margin-top-bottom {
   margin: 10px 0;
+}
+
+.icon {
+  margin: 0 10px 0 0;
+}
+
+.avatar {
+  margin: 10px;
 }
 </style>
