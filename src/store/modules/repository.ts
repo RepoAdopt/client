@@ -81,7 +81,7 @@ interface Repository {
 
 interface State {
   username: string;
-  repositories: [Repository]
+  repositories: Repository[]
 }
 
 interface Root {
@@ -93,7 +93,7 @@ interface Root {
 
 const state = {
   username: '',
-  repositories: null
+  repositories: []
 };
 
 const getters = {
@@ -118,32 +118,21 @@ const actions = {
   loadRepositories(root: Root, params: { username: string, orgs: [] }) {
     Octokit().repos.listForUser({'username': params.username}).then((userRes) => {
       // @ts-ignore
-      let repositories:[Repository] = userRes.data
-
-      if (params.orgs.length == 0){
-        root.commit('setRepositories', { repositories: repositories });
-      }
-      else{
-        for (let i = 0; i < params.orgs.length; i++) {
+      root.commit('setRepositories', { repositories: userRes.data });
+      params.orgs.forEach(org =>
           // @ts-ignore
-          octokit().repos.listForOrg({'org': params.orgs[i].login}).then((orgRes) => {
-            // @ts-ignore
-            repositories = repositories.concat(orgRes.data)
-            if(i == params.orgs.length-1) {
-              root.commit('setRepositories', { repositories: repositories });
-            }
+          octokit().repos.listForOrg({'org': org.login}).then((orgRes) => {
+            root.commit('setRepositories', { repositories: orgRes.data });
           })
-        }
-      }
+      )
     });
   },
 };
 
 
 const mutations = {
-  setRepositories(state: State, params: { repositories: [Repository] } ) {
-    console.log(params.repositories)
-    state.repositories = params.repositories;
+  setRepositories(state: State, params: { repositories: Repository[] } ) {
+    state.repositories = state.repositories.concat(params.repositories);
   },
 };
 
