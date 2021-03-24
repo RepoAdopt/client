@@ -118,12 +118,12 @@ const actions = {
   loadRepositories(root: Root, params: { username: string, orgs: [] }) {
     Octokit().repos.listForUser({'username': params.username}).then((userRes) => {
       // @ts-ignore
-      root.commit('setRepositories', { repositories: userRes.data });
+      root.commit('appendRepositories', { repositories: userRes.data });
     });
     params.orgs.forEach(org =>
         // @ts-ignore
         octokit().repos.listForOrg({'org': org.login}).then((orgRes) => {
-          root.commit('setRepositories', { repositories: orgRes.data });
+          root.commit('appendRepositories', { repositories: orgRes.data });
         })
     );
   },
@@ -131,7 +131,7 @@ const actions = {
 
 
 const mutations = {
-  setRepositories(state: State, params: { repositories: Repository[] } ) {
+  appendRepositories(state: State, params: { repositories: Repository[] } ) {
     state.repositories = state.repositories.concat(params.repositories);
   },
 };
