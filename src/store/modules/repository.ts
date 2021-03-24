@@ -1,5 +1,6 @@
 import Octokit from '@/octokit';
-import User from './user'
+import { User, Orgs } from './user'
+import octokit from "@/octokit";
 
 interface Repository {
   archive_url: string
@@ -55,7 +56,7 @@ interface Repository {
   notifications_url: string
   open_issues: number
   open_issues_count: number
-  owner: typeof User
+  owner: User | Orgs
   permissions: {admin: true, push: true, pull: true}
   private: false
   pulls_url: string
@@ -77,6 +78,7 @@ interface Repository {
   watchers: number
   watchers_count: number
 }
+
 interface State {
   username: string;
   repositories: [Repository]
@@ -107,21 +109,41 @@ const actions = {
   init(root: Root) {
     // @ts-ignore
     const username = root.rootGetters['user/user'].login ?? '';
-    if (username) {
-      root.dispatch('loadRepositories', { username });
+    // @ts-ignore
+    const orgs = root.rootGetters['user/user'].orgs ?? [];
+    if (username && orgs) {
+      root.dispatch('loadRepositories', { username, orgs });
     }
   },
-  loadRepositories(root: Root, params: { username: string }) {
-    Octokit().repos.listForUser({'username': params.username}).then((res) => {
-      root.commit('setRepositories', { repositories: res.data });
+  loadRepositories(root: Root, params: { username: string, orgs: [] }) {
+    Octokit().repos.listForUser({'username': params.username}).then((userRes) => {
+      // @ts-ignore
+      let repositories:[Repository] = userRes.data
+
+      if (params.orgs.length == 0){
+        root.commit('setRepositories', { repositories: repositories });
+      }
+      else{
+        for (let i = 0; i < params.orgs.length; i++) {
+          // @ts-ignore
+          octokit().repos.listForOrg({'org': params.orgs[i].login}).then((orgRes) => {
+            // @ts-ignore
+            repositories = repositories.concat(orgRes.data)
+            if(i == params.orgs.length-1) {
+              root.commit('setRepositories', { repositories: repositories });
+            }
+          })
+        }
+      }
     });
   },
 };
 
+
 const mutations = {
   setRepositories(state: State, params: { repositories: [Repository] } ) {
+    console.log(params.repositories)
     state.repositories = params.repositories;
-    console.log(state.repositories)
   },
 };
 

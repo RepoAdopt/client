@@ -85,7 +85,6 @@ export default defineComponent({
     };
   },
   methods: {
-    ...mapActions('user', {userstoreInit: 'init'}),
     ...mapActions('user', ['init', 'logout']),
     createAdoptable: function() {
       apollo
@@ -130,7 +129,6 @@ export default defineComponent({
     }
   },
   created() {
-    this.userstoreInit();
     this.init();
   },
 });

@@ -36,6 +36,22 @@ export interface User {
   type: string;
   updated_at: string;
   url: string;
+  orgs: Orgs;
+}
+
+export interface Orgs {
+  avatar_url: string
+  description: string
+  events_url: string
+  hooks_url: string
+  id: number
+  issues_url: string
+  login: string
+  members_url: string
+  node_id: string
+  public_members_url: string
+  repos_url: string
+  url: string
 }
 
 interface State {
@@ -82,9 +98,11 @@ const actions = {
   loadUserData(root: Root) {
     Octokit()
       .users.getAuthenticated()
-      .then((res) => {
-        root.commit('setUser', { user: res.data });
-        root.dispatch('repository/init',  {}, {root:true})
+      .then((userRes) => {
+        Octokit().orgs.listForUser({ 'username': userRes.data.login }).then((orgsRes) => {
+          root.commit('setUser', { user: userRes.data, orgs: orgsRes.data });
+          root.dispatch('repository/init',  {}, {root:true})
+        })
       });
   }
 };
@@ -94,8 +112,9 @@ const mutations = {
     state.githubToken = params.token;
     localStorage.setItem('githubToken', params.token);
   },
-  setUser(state: State, params: { user: User }) {
+  setUser(state: State, params: { user: User, orgs: Orgs }) {
     state.user = params.user;
+    state.user.orgs = params.orgs
   },
 };
 
