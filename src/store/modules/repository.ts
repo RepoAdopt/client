@@ -119,13 +119,13 @@ const actions = {
     Octokit().repos.listForUser({'username': params.username}).then((userRes) => {
       // @ts-ignore
       root.commit('setRepositories', { repositories: userRes.data });
-      params.orgs.forEach(org =>
-          // @ts-ignore
-          octokit().repos.listForOrg({'org': org.login}).then((orgRes) => {
-            root.commit('setRepositories', { repositories: orgRes.data });
-          })
-      )
     });
+    params.orgs.forEach(org =>
+        // @ts-ignore
+        octokit().repos.listForOrg({'org': org.login}).then((orgRes) => {
+          root.commit('setRepositories', { repositories: orgRes.data });
+        })
+    );
   },
 };
 
