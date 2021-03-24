@@ -1,5 +1,8 @@
 import Octokit from '@/octokit';
 
+
+import Router from '@/router';
+
 export interface User {
   avatar_url: string;
   bio: string;
@@ -34,6 +37,7 @@ export interface User {
   updated_at: string;
   url: string;
 }
+
 interface State {
   githubToken: boolean | string;
   user: User;
@@ -66,6 +70,10 @@ const actions = {
     if (token) {
       root.dispatch('setGithubToken', { token });
     }
+  },
+  logout(root: Root) {
+    localStorage.removeItem('githubToken');
+		Router.go(0);
   },
   setGithubToken(root: Root, params: { token: string }) {
     root.commit('setToken', { token: params.token });

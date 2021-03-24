@@ -17,10 +17,18 @@
 
           <el-row :span="8" justify="end">
             <SignIn v-if="!githubToken || !user" />
-            <el-row align="middle" type="flex" v-else>
-              {{ user.login }}
-              <el-avatar class="avatar" :src="user.avatar_url" />
-            </el-row>
+            <el-dropdown trigger="click" v-else>
+              <el-row align="middle" type="flex">
+                {{ user.login }}
+                <el-avatar class="avatar" :src="user.avatar_url" />
+                <i class="el-icon-arrow-down el-icon--right icon" />
+              </el-row>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="logout()">Logout</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </el-row>
         </el-row>
       </el-menu>
@@ -31,11 +39,9 @@
         <el-form-item label="Repository" :label-width="formLabelWidth" required>
           <el-select v-model="form.repository" placeholder="Select repository" filterable>
 <!--            TODO MAKE THIS SHIT WORK-->
-              <el-option v-for="{id, full_name} in repositories" :key="id" value={{full_name}}>
+              <el-option v-for="{id, full_name} in repositories" :key="id" :value="full_name">
                 {{ full_name }}
               </el-option>
-            <el-option label="BeauTaapken/DogAdoptionFrontEnd" value="BeauTaapken/DogAdoptionFrontEnd"></el-option>
-            <el-option label="BeauTaapken/DogAdoptionAPI" value="BeauTaapken/DogAdoptionAPI"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="Description" :label-width="formLabelWidth">
@@ -80,6 +86,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('user', {userstoreInit: 'init'}),
+    ...mapActions('user', ['init', 'logout']),
     createAdoptable: function() {
       apollo
         .mutate({
@@ -124,6 +131,7 @@ export default defineComponent({
   },
   created() {
     this.userstoreInit();
+    this.init();
   },
 });
 </script>
@@ -144,6 +152,10 @@ export default defineComponent({
 
 .margin-top-bottom {
   margin: 10px 0;
+}
+
+.icon {
+  margin: 0 10px 0 0;
 }
 
 .avatar {
