@@ -1,6 +1,4 @@
 import Octokit from '@/octokit';
-
-
 import Router from '@/router';
 
 export interface User {
@@ -101,7 +99,7 @@ const actions = {
       .then((userRes) => {
         root.commit('setUser', { user: userRes.data });
         Octokit().orgs.listForUser({ 'username': userRes.data.login }).then((orgsRes) => {
-          root.commit('setOrgs', { user: orgsRes.data });
+          root.commit('setOrgs', { orgs: orgsRes.data });
           root.dispatch('repository/init',  {}, {root:true})
         })
       });
