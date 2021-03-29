@@ -1,6 +1,5 @@
 import Octokit from '@/octokit';
 import { User, Orgs } from './user'
-import octokit from "@/octokit";
 
 interface Repository {
   archive_url: string

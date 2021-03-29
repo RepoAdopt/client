@@ -1,17 +1,15 @@
 <template>
-  <el-row>
-    <el-col :span="6">left</el-col>
+  <el-col :span="6">left</el-col>
 
-    <el-col :span="12">
-      <ul class="infinite-list" v-infinite-scroll="load" v-if="adoptables">
-        <li v-for="(adoptable, index) in adoptables" :key="`adoptable:${index}-${adoptable.repository}`">
-          <Adoptable :repository="adoptable.repository" :description="adoptable.description" :readme="adoptable.readme" />
-        </li>
-      </ul>
-    </el-col>
+  <el-col :span="12">
+    <ul class="infinite-list" v-infinite-scroll="load" v-if="adoptables">
+      <li v-for="(adoptable, index) in adoptables" :key="`adoptable:${index}-${adoptable.repository}`">
+        <Adoptable :repository="adoptable.repository" :description="adoptable.description" :readme="adoptable.readme" />
+      </li>
+    </ul>
+  </el-col>
 
-    <el-col :span="6">right</el-col>
-  </el-row>
+  <el-col :span="6">right</el-col>
 </template>
 
 <script lang="ts">
