@@ -1,6 +1,4 @@
 import Octokit from '@/octokit';
-
-
 import Router from '@/router';
 
 export interface User {
