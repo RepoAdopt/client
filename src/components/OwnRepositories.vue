@@ -7,7 +7,7 @@
         clearable>
     </el-input>
     <ul class="infinite-list" v-infinite-scroll="load" v-if="adoptables">
-      <li v-for="(adoptable, index) in adoptables" :key="`adoptable:${index}-${adoptable.repository}`">
+      <li class="own-adoptables" v-for="(adoptable, index) in adoptables" :key="`adoptable:${index}-${adoptable.repository}`">
         <h2>{{ adoptable.repository }}</h2>
       </li>
     </ul>
@@ -35,5 +35,8 @@ export default defineComponent({
 <style scoped>
 .padding {
   padding: 10px 20px;
+}
+.own-adoptables {
+  margin: 10px 0;
 }
 </style>
