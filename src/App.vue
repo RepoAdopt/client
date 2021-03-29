@@ -1,7 +1,6 @@
 <template>
   <navbar/>
   <el-container class="container">
-
     <router-view />
   </el-container>
 </template>

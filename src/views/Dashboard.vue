@@ -1,5 +1,5 @@
 <template>
-  <el-col :span="6">left</el-col>
+  <el-col :span="6"><OwnRepositories/></el-col>
 
   <el-col :span="12">
     <ul class="infinite-list" v-infinite-scroll="load" v-if="adoptables">
@@ -17,10 +17,11 @@ import { defineComponent } from 'vue';
 import { mapGetters, mapActions } from 'vuex';
 
 import Adoptable from '@/components/Adoptable.vue';
+import OwnRepositories from '@/components/OwnRepositories.vue'
 
 export default defineComponent({
   name: 'Dashboard',
-  components: { Adoptable },
+  components: { Adoptable, OwnRepositories },
   computed: { ...mapGetters('adoptables', ['adoptables']) },
   methods: {
     ...mapActions('adoptables', ['load']),
