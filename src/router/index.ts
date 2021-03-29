@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
         },
       }
     ).then((res) => {
-      Store.dispatch('user/setGithubToken', { token: res?.data?.access_token?.[0] });
+      Store.dispatch('user/setTokens', { githubToken: res?.data?.github_token, repoAdoptToken: res?.data?.repoadopt_token });
     });
 
     delete to.query.code;

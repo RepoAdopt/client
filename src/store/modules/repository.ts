@@ -121,7 +121,7 @@ const actions = {
     });
     params.orgs.forEach(org =>
         // @ts-ignore
-        octokit().repos.listForOrg({'org': org.login}).then((orgRes) => {
+        Octokit().repos.listForOrg({'org': org.login}).then((orgRes) => {
           root.commit('appendRepositories', { repositories: orgRes.data });
         })
     );

@@ -54,6 +54,7 @@ export interface Orgs {
 
 interface State {
   githubToken: boolean | string;
+  repoAdoptToken: boolean | string;
   user: User;
 }
 
@@ -65,6 +66,7 @@ interface Root {
 
 const state = {
   githubToken: false,
+  repoAdoptToken: false,
   user: null,
 };
 
@@ -79,18 +81,19 @@ const getters = {
 
 const actions = {
   init(root: Root) {
-    const token = localStorage.getItem('githubToken') ?? false;
+    const githubToken = localStorage.getItem('githubToken') ?? false;
+    const repoAdoptToken = localStorage.getItem('repoAdoptToken') ?? false;
 
-    if (token) {
-      root.dispatch('setGithubToken', { token });
+    if (githubToken) {
+      root.dispatch('setTokens', { githubToken: githubToken, repoAdoptToken: repoAdoptToken });
     }
   },
   logout(root: Root) {
     localStorage.removeItem('githubToken');
 		Router.go(0);
   },
-  setGithubToken(root: Root, params: { token: string }) {
-    root.commit('setToken', { token: params.token });
+  setTokens(root: Root, params: { githubToken: string, repoAdoptToken: string }) {
+    root.commit('setToken', { githubToken: params.githubToken, repoAdoptToken: params.repoAdoptToken });
     root.dispatch('loadUserData');
   },
   loadUserData(root: Root) {
@@ -107,9 +110,11 @@ const actions = {
 };
 
 const mutations = {
-  setToken(state: State, params: { token: string }) {
-    state.githubToken = params.token;
-    localStorage.setItem('githubToken', params.token);
+  setToken(state: State, params: { githubToken: string, repoAdoptToken: string }) {
+    state.githubToken = params.githubToken;
+    state.repoAdoptToken = params.repoAdoptToken
+    localStorage.setItem('githubToken', params.githubToken);
+    localStorage.setItem('repoAdoptToken', params.repoAdoptToken)
   },
   setUser(state: State, params: { user: User }) {
     state.user = params.user;
