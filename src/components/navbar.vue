@@ -74,7 +74,7 @@ export default defineComponent({
       dialogFormVisible: false,
       form: {
         repository: null,
-        description: null,
+        description: "",
       },
       formLabelWidth: '120px',
     };
@@ -98,7 +98,7 @@ export default defineComponent({
           .then(() => {
             this.dialogFormVisible = false;
             this.form.repository = null;
-            this.form.description = null;
+            this.form.description = "";
             this.showSuccess("Succefully added repository", "Your repository has been added to RepoAdopt")
           })
           .catch(() => {

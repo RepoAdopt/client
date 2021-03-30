@@ -90,7 +90,8 @@ const actions = {
   },
   logout(root: Root) {
     localStorage.removeItem('githubToken');
-		Router.go(0);
+    localStorage.removeItem('repoAdoptToken')
+    Router.go(0);
   },
   setTokens(root: Root, params: { githubToken: string, repoAdoptToken: string }) {
     root.commit('setToken', { githubToken: params.githubToken, repoAdoptToken: params.repoAdoptToken });

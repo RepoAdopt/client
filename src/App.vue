@@ -21,6 +21,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .container {
   width: 100vw;
-  height: 100vh;
+  height: 90vh;
 }
 </style>

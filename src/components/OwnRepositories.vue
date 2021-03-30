@@ -1,5 +1,5 @@
 <template>
-  <el-col class="padding">
+  <el-col>
     <h1>My repositories</h1>
     <el-input
         placeholder="Search for your adoptables"
@@ -41,9 +41,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.padding {
-  padding: 10px 20px;
-}
 .own-adoptables {
   margin: 10px 0;
 }

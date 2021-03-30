@@ -1,41 +1,38 @@
 <template>
-  <el-col :span="6"><OwnRepositories/></el-col>
-
-  <el-col :span="12">
-    <ul class="infinite-list" v-infinite-scroll="load" v-if="adoptables">
-      <li v-for="(adoptable, index) in adoptables" :key="`adoptable:${index}-${adoptable.repository}`">
-        <Adoptable :repository="adoptable.repository" :description="adoptable.description" :readme="adoptable.readme" />
-      </li>
-    </ul>
+  <el-col :span="6" class="padding">
+    <OwnRepositories v-if="githubToken && user"/>
+    <div v-if="!githubToken || !user">Not logged in</div>
   </el-col>
 
-  <el-col :span="6">right</el-col>
+  <el-col :span="12">
+<!--TODO make it so correct items is loaded depending on what the user want to see-->
+    <InfiniteList></InfiniteList>
+  </el-col>
+
+  <el-col :span="6" class="padding">
+    <div v-if="githubToken && user">right</div>
+    <div v-if="!githubToken || !user">Not logged in</div>
+  </el-col>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapGetters, mapActions } from 'vuex';
+import { defineComponent } from 'vue'
+import { mapGetters } from 'vuex';
 
-import Adoptable from '@/components/Adoptable.vue';
 import OwnRepositories from '@/components/OwnRepositories.vue'
+import InfiniteList from '@/components/InfiniteList.vue'
 
 export default defineComponent({
   name: 'Dashboard',
-  components: { Adoptable, OwnRepositories },
-  computed: { ...mapGetters('adoptables', ['adoptables']) },
-  methods: {
-    ...mapActions('adoptables', ['load']),
-  },
-  created() {
-    this.load();
+  components: { OwnRepositories, InfiniteList },
+  computed: {
+    ...mapGetters('user', ['githubToken', 'user']),
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.infinite-list {
-  margin: 0 10px;
-  overflow: auto;
-  max-height: 90vh;
+.padding {
+  padding: 10px 20px;
 }
 </style>
