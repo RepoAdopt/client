@@ -88,7 +88,7 @@ export default defineComponent({
             mutation($repository: String!, $description: String!) {
               createAdoptable(repository: $repository, description: $description) {
                 adoptable {
-                  id
+                  repository
                 }
               }
             }

@@ -1,13 +1,13 @@
 <template>
   <el-col>
-    <h1>My repositories</h1>
+    <h1 class="own-adoptables">My repositories</h1>
     <el-input
         placeholder="Search for your adoptables"
         v-model="search"
         clearable
     />
-    <ul id="own-adoptable-list" v-if="adoptables">
-      <li class="own-adoptables" v-for="(adoptable, index) in adoptables" :key="`adoptable:${index}-${adoptable.repository}`">
+    <ul id="own-adoptable-list">
+      <li class="own-adoptables" v-for="(adoptable, index) in filteredList" :key="`adoptable:${index}-${adoptable.repository}`">
         <h2>{{ adoptable.repository }}</h2>
       </li>
     </ul>
@@ -16,7 +16,8 @@
 
 <script>
 import { defineComponent } from 'vue';
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
+import adoptables from "@/store/modules/ownAdoptables";
 
 export default defineComponent({
   name: "OwnRepositories",
@@ -27,14 +28,15 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('ownAdoptables', ['adoptables']),
-    // filteredList: function() {
-    //   return this.adoptables.filter(adoptable => {
-    //     return adoptable.repository.toLowerCase().includes(this.search.toLowerCase())
-    //   })
-    // }
+    filteredList: function() {
+      console.log(adoptables)
+      return this.adoptables.filter(adoptable => {
+        return adoptable.repository.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
   },
-  methods: {
-    ...mapActions('ownAdoptables', ['load']),
+  created() {
+    console.log(adoptables)
   }
 });
 </script>

@@ -17,15 +17,13 @@ const state = () => ({
 
 const getters = {
   adoptables: (state: State) => {
+    console.log(state.adoptables)
     return state.adoptables;
   },
 };
 
 const actions = {
   load(root: { commit: (mutation: string, params?: any) => void; state: State }) {
-
-    console.log("now getting myadoptables")
-
     Apollo.query({
       query: gql`
         query {
@@ -36,21 +34,15 @@ const actions = {
       `
     })
     .then((result) => {
-        root.commit('addAdoptable', { adoptables: result.data });
-        console.log(result.data)
+      console.log(result)
+      root.commit('addAdoptables', { adoptables: result.data.myAdoptables });
     })
   },
 };
 
 const mutations = {
-  addAdoptable(state: State, params: { adoptables: Array<Adoptable> | Adoptable }) {
-    const { adoptables } = params;
-
-    if (Array.isArray(adoptables)) {
-      state.adoptables.push(...adoptables);
-    } else {
-      state.adoptables.push(adoptables);
-    }
+  addAdoptables(state: State, params: { adoptables: Array<Adoptable> }) {
+    state.adoptables = params.adoptables
   },
 };
 

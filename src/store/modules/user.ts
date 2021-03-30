@@ -96,6 +96,7 @@ const actions = {
   },
   setTokens(root: Root, params: { githubToken: string; repoAdoptToken: string }) {
     root.commit('setToken', { githubToken: params.githubToken, repoAdoptToken: params.repoAdoptToken });
+    root.dispatch('ownAdoptables/load', {}, { root: true })
     root.dispatch('loadUserData');
   },
   loadUserData(root: Root) {
@@ -108,8 +109,6 @@ const actions = {
           .then((orgsRes) => {
             root.commit('setOrgs', { orgs: orgsRes.data });
             root.dispatch('repository/init', {}, { root: true });
-            console.log("dispatching all this shit")
-            root.dispatch('ownAdoptables/load', {}, { root: true })
           });
       });
   },
