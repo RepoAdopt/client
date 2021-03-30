@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-const repoAdoptToken = localStorage.getItem('repoAdoptToken') ?? false;
+
 
 const api = axios.create({
 	baseURL: 'http://localhost:5001/',
-	headers: {
-		Authorization: "Bearer " + repoAdoptToken
-	}
 });
+
+const repoAdoptToken = localStorage.getItem('repoAdoptToken') ?? false;
+if(repoAdoptToken){
+	api.defaults.headers.common['Authorization'] = repoAdoptToken;
+}
 
 export default api;
