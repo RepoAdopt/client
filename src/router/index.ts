@@ -12,6 +12,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.redirectedFrom?.path === '/auth/gh') {
+    delete to.query.code;
+    to.fullPath = to.fullPath.replace(/\?code(.*)/, '');
     Api.post(
       '/signin',
       {},
@@ -23,12 +25,11 @@ router.beforeEach((to, from, next) => {
       }
     ).then((res) => {
       Store.dispatch('user/setTokens', { githubToken: res?.data?.github_token, repoAdoptToken: res?.data?.repoadopt_token });
+      next();
     });
-
-    delete to.query.code;
-    to.fullPath = to.fullPath.replace(/\?code(.*)/, '');
+  } else {
+    next();
   }
-  next();
 });
 
 export default router;

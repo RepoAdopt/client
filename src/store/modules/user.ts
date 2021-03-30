@@ -38,18 +38,18 @@ export interface User {
 }
 
 export interface Orgs {
-  avatar_url: string
-  description: string
-  events_url: string
-  hooks_url: string
-  id: number
-  issues_url: string
-  login: string
-  members_url: string
-  node_id: string
-  public_members_url: string
-  repos_url: string
-  url: string
+  avatar_url: string;
+  description: string;
+  events_url: string;
+  hooks_url: string;
+  id: number;
+  issues_url: string;
+  login: string;
+  members_url: string;
+  node_id: string;
+  public_members_url: string;
+  repos_url: string;
+  url: string;
 }
 
 interface State {
@@ -87,13 +87,14 @@ const actions = {
     if (githubToken) {
       root.dispatch('setTokens', { githubToken: githubToken, repoAdoptToken: repoAdoptToken });
     }
+    root.dispatch('adoptables/enableFetch', {}, { root: true });
   },
   logout(root: Root) {
     localStorage.removeItem('githubToken');
-    localStorage.removeItem('repoAdoptToken')
+    localStorage.removeItem('repoAdoptToken');
     Router.go(0);
   },
-  setTokens(root: Root, params: { githubToken: string, repoAdoptToken: string }) {
+  setTokens(root: Root, params: { githubToken: string; repoAdoptToken: string }) {
     root.commit('setToken', { githubToken: params.githubToken, repoAdoptToken: params.repoAdoptToken });
     root.dispatch('loadUserData');
   },
@@ -102,27 +103,29 @@ const actions = {
       .users.getAuthenticated()
       .then((userRes) => {
         root.commit('setUser', { user: userRes.data });
-        Octokit().orgs.listForUser({ 'username': userRes.data.login }).then((orgsRes) => {
-          root.commit('setOrgs', { orgs: orgsRes.data });
-          root.dispatch('repository/init',  {}, {root:true})
-        })
+        Octokit()
+          .orgs.listForUser({ username: userRes.data.login })
+          .then((orgsRes) => {
+            root.commit('setOrgs', { orgs: orgsRes.data });
+            root.dispatch('repository/init', {}, { root: true });
+          });
       });
-  }
+  },
 };
 
 const mutations = {
-  setToken(state: State, params: { githubToken: string, repoAdoptToken: string }) {
+  setToken(state: State, params: { githubToken: string; repoAdoptToken: string }) {
     state.githubToken = params.githubToken;
-    state.repoAdoptToken = params.repoAdoptToken
+    state.repoAdoptToken = params.repoAdoptToken;
     localStorage.setItem('githubToken', params.githubToken);
-    localStorage.setItem('repoAdoptToken', params.repoAdoptToken)
+    localStorage.setItem('repoAdoptToken', params.repoAdoptToken);
   },
   setUser(state: State, params: { user: User }) {
     state.user = params.user;
   },
-  setOrgs(state: State, params: { orgs: Orgs }){
-    state.user.orgs = params.orgs
-  }
+  setOrgs(state: State, params: { orgs: Orgs }) {
+    state.user.orgs = params.orgs;
+  },
 };
 
 export default {

@@ -13,12 +13,14 @@ interface State {
   adoptables: Array<Adoptable>;
   page: number;
   fetching: boolean;
+  canFetch: boolean;
 }
 
 const state = () => ({
   adoptables: [],
   page: 0,
   fetching: false,
+  canFetch: false,
 });
 
 const getters = {
@@ -28,7 +30,19 @@ const getters = {
 };
 
 const actions = {
+  enableFetch(root: { commit: (mutation: string, params?: any) => void; state: State }) {
+    root.commit('enableFetch');
+  },
   load(root: { commit: (mutation: string, params?: any) => void; state: State }) {
+    console.log(root.state.canFetch);
+    if (!root.state.canFetch) {
+      setTimeout(function() {
+        // @ts-ignore
+        root.dispatch('load');
+      }, 200);
+      return;
+    }
+
     if (root.state.fetching) {
       return;
     }
@@ -83,6 +97,9 @@ const actions = {
 };
 
 const mutations = {
+  enableFetch(state: State) {
+    state.canFetch = true;
+  },
   startFetch(state: State) {
     state.fetching = true;
   },
