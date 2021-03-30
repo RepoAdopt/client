@@ -29,8 +29,8 @@ const actions = {
 
     Apollo.query({
       query: gql`
-        query($page: Int!, $limit: Int!) {
-          adoptable(page: $page, limit: $limit) {
+        query {
+          myAdoptables {
             repository
           }
         }
