@@ -7,7 +7,7 @@
         clearable
     />
     <ul id="own-adoptable-list" v-if="adoptables">
-      <li class="own-adoptables" v-for="(adoptable, index) in filteredList" :key="`adoptable:${index}-${adoptable.repository}`">
+      <li class="own-adoptables" v-for="(adoptable, index) in adoptables" :key="`adoptable:${index}-${adoptable.repository}`">
         <h2>{{ adoptable.repository }}</h2>
       </li>
     </ul>
@@ -26,17 +26,16 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapGetters('adoptables', ['adoptables']),
-
-    filteredList: function() {
-      return this.adoptables.filter(adoptable => {
-        return adoptable.repository.toLowerCase().includes(this.search.toLowerCase())
-      })
-    }
+    ...mapGetters('ownAdoptables', ['adoptables']),
+    // filteredList: function() {
+    //   return this.adoptables.filter(adoptable => {
+    //     return adoptable.repository.toLowerCase().includes(this.search.toLowerCase())
+    //   })
+    // }
   },
   methods: {
-    ...mapActions('adoptables', ['load']),
-  },
+    ...mapActions('ownAdoptables', ['load']),
+  }
 });
 </script>
 

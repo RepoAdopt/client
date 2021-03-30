@@ -108,6 +108,8 @@ const actions = {
           .then((orgsRes) => {
             root.commit('setOrgs', { orgs: orgsRes.data });
             root.dispatch('repository/init', {}, { root: true });
+            console.log("dispatching all this shit")
+            root.dispatch('ownAdoptables/load', {}, { root: true })
           });
       });
   },

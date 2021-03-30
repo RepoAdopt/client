@@ -34,7 +34,6 @@ const actions = {
     root.commit('enableFetch');
   },
   load(root: { commit: (mutation: string, params?: any) => void; state: State }) {
-    console.log(root.state.canFetch);
     if (!root.state.canFetch) {
       setTimeout(function() {
         // @ts-ignore

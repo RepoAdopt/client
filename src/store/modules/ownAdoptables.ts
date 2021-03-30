@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 
 import Apollo from '@/apollo';
-import Octokit from '@/octokit';
 
 interface Adoptable {
   repository: string;
@@ -25,7 +24,7 @@ const getters = {
 const actions = {
   load(root: { commit: (mutation: string, params?: any) => void; state: State }) {
 
-    root.commit('startFetch');
+    console.log("now getting myadoptables")
 
     Apollo.query({
       query: gql`
@@ -34,20 +33,12 @@ const actions = {
             repository
           }
         }
-      `,
-      variables: {  },
+      `
     })
-      .then((result) => {
-        result.data.adoptable.forEach((adoptable: Adoptable) => {
-          const [owner, repo] = adoptable.repository.split('/', 2);
-          root.commit('addAdoptable', { adoptables: adoptable });
-        });
-      })
-      .catch((err) => {
-        setTimeout(function() {
-          root.commit('finishFetch');
-        }, 1000);
-      });
+    .then((result) => {
+        root.commit('addAdoptable', { adoptables: result.data });
+        console.log(result.data)
+    })
   },
 };
 
