@@ -17,7 +17,6 @@ const state = () => ({
 
 const getters = {
   adoptables: (state: State) => {
-    console.log(state.adoptables)
     return state.adoptables;
   },
 };
@@ -34,7 +33,6 @@ const actions = {
       `
     })
     .then((result) => {
-      console.log(result)
       root.commit('addAdoptables', { adoptables: result.data.myAdoptables });
     })
   },

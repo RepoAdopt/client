@@ -17,7 +17,6 @@
 <script>
 import { defineComponent } from 'vue';
 import {mapGetters} from "vuex";
-import adoptables from "@/store/modules/ownAdoptables";
 
 export default defineComponent({
   name: "OwnRepositories",
@@ -29,14 +28,10 @@ export default defineComponent({
   computed: {
     ...mapGetters('ownAdoptables', ['adoptables']),
     filteredList: function() {
-      console.log(adoptables)
       return this.adoptables.filter(adoptable => {
         return adoptable.repository.toLowerCase().includes(this.search.toLowerCase())
       })
     }
-  },
-  created() {
-    console.log(adoptables)
   }
 });
 </script>

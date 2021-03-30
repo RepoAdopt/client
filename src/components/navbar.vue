@@ -36,7 +36,7 @@
     <el-form :model="form">
       <el-form-item label="Repository" :label-width="formLabelWidth" required>
         <el-select v-model="form.repository" placeholder="Select repository" filterable>
-          <el-option v-for="{id, full_name} in repositories" :key="id" :value="full_name">
+          <el-option v-for="{id, full_name} in removedAddedItems" :key="id" :value="full_name">
             {{ full_name }}
           </el-option>
         </el-select>
@@ -59,16 +59,11 @@ import apollo from "@/apollo";
 import gql from "graphql-tag";
 import {ElNotification} from "element-plus";
 
-
 import SignIn from "@/components/SignIn.vue";
 
 export default defineComponent({
   name: "navbar",
   components: { SignIn },
-  computed: {
-    ...mapGetters('user', ['githubToken', 'user']),
-    ...mapGetters('repository', ['repositories'])
-  },
   data() {
     return {
       dialogFormVisible: false,
@@ -78,6 +73,17 @@ export default defineComponent({
       },
       formLabelWidth: '120px',
     };
+  },
+  computed: {
+    ...mapGetters('user', ['githubToken', 'user']),
+    ...mapGetters('repository', ['repositories']),
+    ...mapGetters('ownAdoptables', ['adoptables']),
+    removedAddedItems: function() {
+      //@ts-ignore
+      return this.repositories.filter(repo => {
+        return !this.adoptables.find((x: {repository: string}) => x.repository === repo.full_name)
+      })
+    }
   },
   methods: {
     ...mapActions('user', ['init', 'logout']),
