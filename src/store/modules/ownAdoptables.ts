@@ -35,7 +35,7 @@ const actions = {
           }
         }
       `,
-      variables: { page: root.state.page, limit: process.env.VUE_APP_PAGINATION_LIMIT },
+      variables: {  },
     })
       .then((result) => {
         result.data.adoptable.forEach((adoptable: Adoptable) => {

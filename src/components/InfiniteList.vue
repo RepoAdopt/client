@@ -31,5 +31,6 @@ export default defineComponent({
 .infinite-list {
   margin: 0 10px;
   overflow: auto;
+  max-height: 90vh;
 }
 </style>
