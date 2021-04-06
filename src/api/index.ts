@@ -1,8 +1,10 @@
 import axios from "axios";
 import Store from "@/store";
 
+const url = process.env.VUE_APP_AXIOS;
+
 const api = axios.create({
-  baseURL: "http://localhost:5001/",
+  baseURL: url
 });
 
 axios.interceptors.request.use(
