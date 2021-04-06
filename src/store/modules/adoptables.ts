@@ -1,7 +1,7 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
-import Apollo from '@/apollo';
-import Octokit from '@/octokit';
+import Apollo from "@/apollo";
+import Octokit from "@/octokit";
 
 interface Adoptable {
   repository: string;
@@ -30,14 +30,20 @@ const getters = {
 };
 
 const actions = {
-  enableFetch(root: { commit: (mutation: string, params?: any) => void; state: State }) {
-    root.commit('enableFetch');
+  enableFetch(root: {
+    commit: (mutation: string, params?: any) => void;
+    state: State;
+  }) {
+    root.commit("enableFetch");
   },
-  load(root: { commit: (mutation: string, params?: any) => void; state: State }) {
+  load(root: {
+    commit: (mutation: string, params?: any) => void;
+    state: State;
+  }) {
     if (!root.state.canFetch) {
       setTimeout(function() {
         // @ts-ignore
-        root.dispatch('load');
+        root.dispatch("load");
       }, 200);
       return;
     }
@@ -46,7 +52,7 @@ const actions = {
       return;
     }
 
-    root.commit('startFetch');
+    root.commit("startFetch");
 
     Apollo.query({
       query: gql`
@@ -56,17 +62,20 @@ const actions = {
           }
         }
       `,
-      variables: { page: root.state.page, limit: process.env.VUE_APP_PAGINATION_LIMIT },
+      variables: {
+        page: root.state.page,
+        limit: process.env.VUE_APP_PAGINATION_LIMIT,
+      },
     })
       .then((result) => {
-        root.commit('incrementPage');
-        root.commit('finishFetch');
+        root.commit("incrementPage");
+        root.commit("finishFetch");
 
         result.data.adoptable.forEach((adoptable: Adoptable) => {
-          const [owner, repo] = adoptable.repository.split('/', 2);
+          const [owner, repo] = adoptable.repository.split("/", 2);
 
           Octokit()
-            .repos.getContent({ owner, repo, path: 'README.md' })
+            .repos.getContent({ owner, repo, path: "README.md" })
             .then((res) => {
               // TODO When fixed remove ignore
               // @ts-ignore: Unreachable code error
@@ -83,13 +92,13 @@ const actions = {
               console.error(error);
             })
             .finally(() => {
-              root.commit('addAdoptable', { adoptables: adoptable });
+              root.commit("addAdoptable", { adoptables: adoptable });
             });
         });
       })
       .catch((err) => {
         setTimeout(function() {
-          root.commit('finishFetch');
+          root.commit("finishFetch");
         }, 1000);
       });
   },
@@ -108,7 +117,10 @@ const mutations = {
   incrementPage(state: State) {
     state.page++;
   },
-  addAdoptable(state: State, params: { adoptables: Array<Adoptable> | Adoptable }) {
+  addAdoptable(
+    state: State,
+    params: { adoptables: Array<Adoptable> | Adoptable },
+  ) {
     const { adoptables } = params;
 
     if (Array.isArray(adoptables)) {

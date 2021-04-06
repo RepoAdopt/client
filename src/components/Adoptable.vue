@@ -12,30 +12,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+  import { defineComponent } from "vue";
 
-export default defineComponent({
-  name: 'adoptable',
-  props: {
-    description: {
-      type: String,
+  export default defineComponent({
+    name: "adoptable",
+    props: {
+      description: {
+        type: String,
+      },
+      repository: {
+        type: String,
+      },
+      readme: {
+        type: String,
+      },
     },
-    repository: {
-      type: String,
-    },
-    readme: {
-      type: String,
-    },
-  },
-});
+  });
 </script>
 
 <style lang="scss" scoped>
-.card {
-  margin: 16px;
-}
+  .card {
+    margin: 16px;
+  }
 
-h1 {
-  font-size: 2rem;
-}
+  h1 {
+    font-size: 2rem;
+  }
 </style>

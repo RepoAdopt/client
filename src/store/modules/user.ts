@@ -1,5 +1,5 @@
-import Octokit from '@/octokit';
-import Router from '@/router';
+import Octokit from "@/octokit";
+import Router from "@/router";
 
 export interface User {
   avatar_url: string;
@@ -75,7 +75,7 @@ const getters = {
     return state.githubToken;
   },
   repoAdoptToken: (state: State) => {
-    return state.repoAdoptToken
+    return state.repoAdoptToken;
   },
   user: (state: State) => {
     return state.user;
@@ -84,45 +84,59 @@ const getters = {
 
 const actions = {
   init(root: Root) {
-    const githubToken = localStorage.getItem('githubToken') ?? false;
-    const repoAdoptToken = localStorage.getItem('repoAdoptToken') ?? false;
+    const githubToken = localStorage.getItem("githubToken") ?? false;
+    const repoAdoptToken = localStorage.getItem("repoAdoptToken") ?? false;
 
     if (githubToken && repoAdoptToken) {
-      root.dispatch('setTokens', { githubToken: githubToken, repoAdoptToken: repoAdoptToken });
+      root.dispatch("setTokens", {
+        githubToken: githubToken,
+        repoAdoptToken: repoAdoptToken,
+      });
     }
-    root.dispatch('adoptables/enableFetch', {}, { root: true });
+    root.dispatch("adoptables/enableFetch", {}, { root: true });
   },
   logout(root: Root) {
-    localStorage.removeItem('githubToken');
-    localStorage.removeItem('repoAdoptToken');
+    localStorage.removeItem("githubToken");
+    localStorage.removeItem("repoAdoptToken");
     Router.go(0);
   },
-  setTokens(root: Root, params: { githubToken: string; repoAdoptToken: string }) {
-    root.commit('setToken', { githubToken: params.githubToken, repoAdoptToken: params.repoAdoptToken });
-    root.dispatch('ownAdoptables/load', {}, { root: true })
-    root.dispatch('loadUserData');
+  setTokens(
+    root: Root,
+    params: { githubToken: string; repoAdoptToken: string },
+  ) {
+    root.commit("setToken", {
+      githubToken: params.githubToken,
+      repoAdoptToken: params.repoAdoptToken,
+    });
+    root.dispatch("ownAdoptables/load", {}, { root: true });
+    root.dispatch("loadUserData");
   },
   loadUserData(root: Root) {
     Octokit()
       .users.getAuthenticated()
       .then((userRes) => {
-        root.commit('setUser', { user: userRes.data });
+        root.commit("setUser", { user: userRes.data });
         Octokit()
-          .orgs.listForUser({ username: userRes.data.login })
+          .orgs.listForUser({
+            username: userRes.data.login,
+          })
           .then((orgsRes) => {
-            root.commit('setOrgs', { orgs: orgsRes.data });
-            root.dispatch('repository/init', {}, { root: true });
+            root.commit("setOrgs", { orgs: orgsRes.data });
+            root.dispatch("repository/init", {}, { root: true });
           });
       });
   },
 };
 
 const mutations = {
-  setToken(state: State, params: { githubToken: string; repoAdoptToken: string }) {
+  setToken(
+    state: State,
+    params: { githubToken: string; repoAdoptToken: string },
+  ) {
     state.githubToken = params.githubToken;
     state.repoAdoptToken = params.repoAdoptToken;
-    localStorage.setItem('githubToken', params.githubToken);
-    localStorage.setItem('repoAdoptToken', params.repoAdoptToken);
+    localStorage.setItem("githubToken", params.githubToken);
+    localStorage.setItem("repoAdoptToken", params.repoAdoptToken);
   },
   setUser(state: State, params: { user: User }) {
     state.user = params.user;
