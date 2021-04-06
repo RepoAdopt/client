@@ -1,7 +1,8 @@
 version: 2.1
 orbs:
   node: circleci/node@4.2.0
-  
+  sonarcloud: sonarsource/sonarcloud@1.0.2
+
 jobs:
   build-and-test:
     docker:
@@ -23,6 +24,7 @@ jobs:
             - dockerfile
             - nginx.conf
           key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+      - sonarcloud/scan
 
   docker-build:
     docker:
@@ -36,8 +38,8 @@ jobs:
       - run:
           name: docker login
           command: |
-           docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD
-           docker push docker.io/$NAMESPACE/client:${CIRCLE_BRANCH#*/}
+            docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD
+            docker push docker.io/$NAMESPACE/client:${CIRCLE_BRANCH#*/}
 
 workflows:
   main:
