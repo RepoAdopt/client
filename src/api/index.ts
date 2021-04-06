@@ -6,9 +6,17 @@ const api = axios.create({
 	baseURL: 'http://localhost:5001/',
 });
 
-const repoAdoptToken = localStorage.getItem('repoAdoptToken') ?? false;
-if(repoAdoptToken){
-	api.defaults.headers.common['Authorization'] = repoAdoptToken;
-}
+axios.interceptors.request.use(
+	config => {
+		if (!config.headers.Authorization) {
+			const repoAdoptToken = localStorage.getItem('repoAdoptToken') ?? false;
+			if(repoAdoptToken){
+				config.headers.common['Authorization'] = repoAdoptToken;
+			}
+		}
+		return config
+	},
+	error => Promise.reject(error)
+)
 
 export default api;
