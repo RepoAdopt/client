@@ -39,5 +39,6 @@ export default defineComponent({
 <style scoped>
 .own-adoptables {
   margin: 10px 0;
+  white-space: nowrap;
 }
 </style>
