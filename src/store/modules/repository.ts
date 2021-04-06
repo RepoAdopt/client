@@ -1,6 +1,5 @@
 import Octokit from '@/octokit';
 import { User, Orgs } from './user'
-import octokit from "@/octokit";
 
 interface Repository {
   archive_url: string
@@ -122,7 +121,7 @@ const actions = {
     });
     params.orgs.forEach(org =>
         // @ts-ignore
-        octokit().repos.listForOrg({'org': org.login}).then((orgRes) => {
+        Octokit().repos.listForOrg({'org': org.login}).then((orgRes) => {
           root.commit('appendRepositories', { repositories: orgRes.data });
         })
     );

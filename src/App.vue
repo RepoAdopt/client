@@ -1,134 +1,16 @@
 <template>
+  <navbar/>
   <el-container class="container">
-    <el-header class="no-pad">
-      <el-menu mode="horizontal">
-        <el-row type="flex" justify="space-between">
-          <el-col :span="8">
-            <el-row>
-              <el-menu-item index="0">/RepoAdopt/</el-menu-item>
-              <el-menu-item index="1">My matches</el-menu-item>
-            </el-row>
-          </el-col>
-          <el-col :span="8">
-            <el-row justify="center">
-              <el-button type="primary" class="margin-top-bottom" @click="dialogFormVisible = true" v-if="githubToken">Add Adoptable</el-button>
-            </el-row>
-          </el-col>
-
-          <el-row :span="8" justify="end">
-            <SignIn v-if="!githubToken || !user" />
-            <el-dropdown trigger="click" v-else>
-              <el-row align="middle" type="flex">
-                {{ user.login }}
-                <el-avatar class="avatar" :src="user.avatar_url" />
-                <i class="el-icon-arrow-down el-icon--right icon" />
-              </el-row>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item @click="logout()">Logout</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
-          </el-row>
-        </el-row>
-      </el-menu>
-    </el-header>
-    <!--TODO CHANGE THIS WHEN WHITE SPACE NOT BEING TYPED IN TEXTAREA IN MENU GETS FIXED, DEFINITELY NOT CORRECT!!!    -->
-    <el-dialog v-model="dialogFormVisible" title="Add Adoptable" center>
-      <el-form :model="form">
-        <el-form-item label="Repository" :label-width="formLabelWidth" required>
-          <el-select v-model="form.repository" placeholder="Select repository" filterable>
-              <el-option v-for="{id, full_name} in repositories" :key="id" :value="full_name">
-                {{ full_name }}
-              </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Description" :label-width="formLabelWidth">
-          <el-input v-model="form.description" autocomplete="off" type="textarea" resize="none" :rows="10"></el-input>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="createAdoptable">Confirm</el-button>
-      </template>
-    </el-dialog>
     <router-view />
   </el-container>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapGetters, mapActions } from 'vuex';
-
-import { ElNotification } from 'element-plus'
-
-import apollo from '@/apollo';
-import gql from 'graphql-tag';
-
-import SignIn from '@/components/SignIn.vue';
+import Navbar from "@/components/navbar.vue";
 
 export default defineComponent({
-  components: { SignIn },
-  computed: {
-    ...mapGetters('user', ['githubToken', 'user']),
-    ...mapGetters('repository', ['repositories'])
-  },
-  data() {
-    return {
-      dialogFormVisible: false,
-      form: {
-        repository: null,
-        description: '',
-      },
-      formLabelWidth: '120px',
-    };
-  },
-  methods: {
-    ...mapActions('user', ['init', 'logout']),
-    createAdoptable: function() {
-      apollo
-        .mutate({
-          mutation: gql`
-            mutation($repository: String!, $description: String!) {
-              createAdoptable(repository: $repository, description: $description) {
-                adoptable {
-                  id
-                }
-              }
-            }
-          `,
-          variables: { repository: this.form.repository, description: this.form.description },
-        })
-        .then(() => {
-          this.dialogFormVisible = false;
-          this.form.repository = null;
-          this.form.description = "";
-          this.showSuccess("Succefully added repository", "Your repository has been added to RepoAdopt")
-        })
-        .catch(() => {
-          this.showError("Could not add", "Select a repository from the dropdown");
-        });
-    },
-    showError: function(title: string, message: string) {
-      ElNotification({
-        title: title,
-        message: message,
-        position: 'bottom-right',
-        type: 'error'
-      })
-    },
-    showSuccess: function (title: string, message: string) {
-      ElNotification({
-        title: title,
-        message: message,
-        position: 'bottom-right',
-        type: 'success'
-      })
-    }
-  },
-  created() {
-    this.init();
-  },
+  components: {Navbar}
 });
 </script>
 
@@ -139,22 +21,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .container {
   width: 100vw;
-  height: 100vh;
-}
-
-.no-pad {
-  padding: 0;
-}
-
-.margin-top-bottom {
-  margin: 10px 0;
-}
-
-.icon {
-  margin: 0 10px 0 0;
-}
-
-.avatar {
-  margin: 10px;
+  height: 90vh;
 }
 </style>
