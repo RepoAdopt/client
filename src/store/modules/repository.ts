@@ -118,12 +118,11 @@ const actions = {
     Octokit()
       .repos.listForUser({ username: params.username })
       .then((userRes) => {
-        // @ts-ignore
         root.commit("appendRepositories", { repositories: userRes.data });
       });
     params.orgs.forEach((org) =>
-      // @ts-ignore
       Octokit()
+        // @ts-ignore No declaration file
         .repos.listForOrg({ org: org.login })
         .then((orgRes) => {
           root.commit("appendRepositories", { repositories: orgRes.data });
