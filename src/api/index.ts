@@ -8,7 +8,7 @@ const api = axios.create({
 });
 
 axios.interceptors.request.use(
-  config => {
+  (config) => {
     if (!config.headers.Authorization) {
       const repoAdoptToken = Store?.getters?.["user/repoAdoptToken"];
       if (repoAdoptToken) {
@@ -17,7 +17,7 @@ axios.interceptors.request.use(
     }
     return config;
   },
-  error => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 export default api;

@@ -7,7 +7,7 @@ import Store from "@/store";
 const url = process.env.VUE_APP_GRAPHQL;
 
 const link = createHttpLink({
-  uri: url + "/graphql"
+  uri: url + "/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -18,8 +18,8 @@ const authLink = setContext((_, { headers }) => {
     return {
       headers: {
         ...headers,
-        Authorization: "Bearer " + token
-      }
+        Authorization: "Bearer " + token,
+      },
     };
   }
 });

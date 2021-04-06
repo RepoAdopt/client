@@ -1,11 +1,11 @@
 <template>
   <el-col :span="6" class="padding max-height">
-    <OwnRepositories v-if="githubToken && user"/>
+    <OwnRepositories v-if="githubToken && user" />
     <div v-else>Not logged in</div>
   </el-col>
 
   <el-col :span="12" class="max-height">
-<!--TODO make it so correct item is loaded depending on user navigation(example: chat)-->
+    <!--TODO make it so correct item is loaded depending on user navigation(example: chat)-->
     <InfiniteList></InfiniteList>
   </el-col>
 
@@ -16,27 +16,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex';
+  import { defineComponent } from "vue";
+  import { mapGetters } from "vuex";
 
-import OwnRepositories from '@/components/OwnRepositories.vue'
-import InfiniteList from '@/components/InfiniteList.vue'
+  import OwnRepositories from "@/components/OwnRepositories.vue";
+  import InfiniteList from "@/components/InfiniteList.vue";
 
-export default defineComponent({
-  name: 'Dashboard',
-  components: { OwnRepositories, InfiniteList },
-  computed: {
-    ...mapGetters('user', ['githubToken', 'user']),
-  },
-});
+  export default defineComponent({
+    name: "Dashboard",
+    components: { OwnRepositories, InfiniteList },
+    computed: {
+      ...mapGetters("user", ["githubToken", "user"]),
+    },
+  });
 </script>
 
 <style lang="scss" scoped>
-.padding {
-  padding: 10px 20px;
-}
-.max-height {
-  overflow: auto;
-  max-height: 90vh;
-}
+  .padding {
+    padding: 10px 20px;
+  }
+  .max-height {
+    overflow: auto;
+    max-height: 90vh;
+  }
 </style>

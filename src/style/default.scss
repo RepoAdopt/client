@@ -1,40 +1,40 @@
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	text-decoration: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
 }
 
 a {
-	color: black;
+  color: black;
 }
 
 li {
-	display: block;
+  display: block;
 }
 
 body {
-	font-family: 'Roboto';
-	overflow-x: hidden;
+  font-family: "Roboto";
+  overflow-x: hidden;
 }
 
 body::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 
 *::-webkit-scrollbar-track {
-	display: none;
+  display: none;
 }
 
 *::-webkit-scrollbar {
-	width: 12px;
+  width: 12px;
 }
 
 *::-webkit-scrollbar-button {
-	display: none;
+  display: none;
 }
 
 *::-webkit-scrollbar-thumb {
-	background: grey;
-	border-radius: 16px;
+  background: grey;
+  border-radius: 16px;
 }
