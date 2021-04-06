@@ -87,6 +87,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('user', ['init', 'logout']),
+    ...mapActions('ownAdoptables', ['appendAdoptable']),
     createAdoptable: function() {
       apollo
           .mutate({
@@ -94,14 +95,16 @@ export default defineComponent({
             mutation($repository: String!, $description: String!) {
               createAdoptable(repository: $repository, description: $description) {
                 adoptable {
-                  repository
+                  repository,
+                  description
                 }
               }
             }
           `,
             variables: { repository: this.form.repository, description: this.form.description },
           })
-          .then(() => {
+          .then(response => {
+            this.appendAdoptable({ adoptable: response.data.createAdoptable.adoptable });
             this.dialogFormVisible = false;
             this.form.repository = null;
             this.form.description = "";
