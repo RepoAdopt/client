@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-
+import Store from "@/store";
 
 const api = axios.create({
 	baseURL: 'http://localhost:5001/',
@@ -9,7 +8,7 @@ const api = axios.create({
 axios.interceptors.request.use(
 	config => {
 		if (!config.headers.Authorization) {
-			const repoAdoptToken = localStorage.getItem('repoAdoptToken') ?? false;
+			const repoAdoptToken = Store?.getters?.['user/repoAdoptToken'];
 			if(repoAdoptToken){
 				config.headers.common['Authorization'] = repoAdoptToken;
 			}

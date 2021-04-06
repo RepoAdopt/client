@@ -74,6 +74,9 @@ const getters = {
   githubToken: (state: State) => {
     return state.githubToken;
   },
+  repoAdoptToken: (state: State) => {
+    return state.repoAdoptToken
+  },
   user: (state: State) => {
     return state.user;
   },
@@ -84,7 +87,7 @@ const actions = {
     const githubToken = localStorage.getItem('githubToken') ?? false;
     const repoAdoptToken = localStorage.getItem('repoAdoptToken') ?? false;
 
-    if (githubToken) {
+    if (githubToken && repoAdoptToken) {
       root.dispatch('setTokens', { githubToken: githubToken, repoAdoptToken: repoAdoptToken });
     }
     root.dispatch('adoptables/enableFetch', {}, { root: true });

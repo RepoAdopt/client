@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 
 import Apollo from '@/apollo';
-import adoptables from "@/store/modules/adoptables";
 
 interface Adoptable {
   repository: string;

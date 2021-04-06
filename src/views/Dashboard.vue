@@ -1,17 +1,17 @@
 <template>
   <el-col :span="6" class="padding max-height">
     <OwnRepositories v-if="githubToken && user"/>
-    <div v-if="!githubToken || !user">Not logged in</div>
+    <div v-else>Not logged in</div>
   </el-col>
 
   <el-col :span="12" class="max-height">
-<!--TODO make it so correct items is loaded depending on what the user want to see-->
+<!--TODO make it so correct item is loaded depending on user navigation(example: chat)-->
     <InfiniteList></InfiniteList>
   </el-col>
 
   <el-col :span="6" class="padding max-height">
     <div v-if="githubToken && user">right</div>
-    <div v-if="!githubToken || !user">Not logged in</div>
+    <div v-else>Not logged in</div>
   </el-col>
 </template>
 
