@@ -1,6 +1,6 @@
 <template>
   <el-col>
-    <h1 class="own-adoptables">My repositories</h1>
+    <h1 class="own-adoptables">My adoptables</h1>
     <el-input
       placeholder="Search for your adoptables"
       v-model="search"

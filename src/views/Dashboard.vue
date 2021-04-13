@@ -19,7 +19,7 @@
   import { defineComponent } from "vue";
   import { mapGetters } from "vuex";
 
-  import OwnRepositories from "@/components/OwnRepositories.vue";
+  import OwnRepositories from "@/components/OwnAdoptables.vue";
   import InfiniteList from "@/components/InfiniteList.vue";
 
   export default defineComponent({
