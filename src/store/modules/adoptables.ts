@@ -59,6 +59,7 @@ const actions = {
       query: gql`
         query($page: Int!, $limit: Int!) {
           adoptable(page: $page, limit: $limit) {
+            id
             repository
             description
           }

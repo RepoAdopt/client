@@ -5,6 +5,7 @@
       :key="`adoptable:${index}-${adoptable.repository}`"
     >
       <Adoptable
+        :id="adoptable.id"
         :repository="adoptable.repository"
         :description="adoptable.description"
         :readme="adoptable.readme"
