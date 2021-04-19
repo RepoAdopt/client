@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 import Apollo from "@/apollo";
 import Octokit from "@/octokit";
 
-interface Adoptable {
+export interface Adoptable {
   id: string;
   repository: string;
   description: string;

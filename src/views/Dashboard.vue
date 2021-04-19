@@ -6,7 +6,7 @@
 
   <el-col :span="12" class="max-height">
     <!--TODO make it so correct item is loaded depending on user navigation(example: chat)-->
-    <InfiniteList></InfiniteList>
+    <router-view />
   </el-col>
 
   <el-col :span="6" class="padding max-height">
@@ -20,11 +20,10 @@
   import { mapGetters } from "vuex";
 
   import OwnRepositories from "@/components/OwnAdoptables.vue";
-  import InfiniteList from "@/components/InfiniteList.vue";
 
   export default defineComponent({
     name: "Dashboard",
-    components: { OwnRepositories, InfiniteList },
+    components: { OwnRepositories },
     computed: {
       ...mapGetters("user", ["githubToken", "user"]),
     },

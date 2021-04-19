@@ -109,6 +109,7 @@ const actions = {
       repoAdoptToken: params.repoAdoptToken,
     });
     root.dispatch("ownAdoptables/load", {}, { root: true });
+    root.dispatch("mymatches/load", {}, { root: true });
     root.dispatch("loadUserData");
   },
   loadUserData(root: Root) {
