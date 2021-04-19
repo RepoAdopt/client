@@ -1,13 +1,13 @@
 <template>
   <el-header class="no-pad">
-    <el-menu mode="horizontal">
+    <el-menu mode="horizontal" router>
       <el-row type="flex" justify="space-between">
         <el-col :span="8">
           <el-row>
-            <el-menu-item index="0">
-              /RepoAdopt/
+            <el-menu-item :route="{ name: 'Dashboard' }" index="0">
+              RepoAdopt
             </el-menu-item>
-            <el-menu-item index="1">
+            <el-menu-item :route="{ name: 'MyMatches' }" index="1">
               My matches
             </el-menu-item>
           </el-row>
