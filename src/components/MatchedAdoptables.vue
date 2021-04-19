@@ -1,14 +1,16 @@
 <template>
   <ul class="match-list">
     <li
-      v-for="(match, index) in matches"
-      :key="`adoptable:${index}-${match.id}`"
+      v-for="(adoptable, index) in staticMatches.map(
+        (match) => match.adoptable,
+      )"
+      :key="`adoptable:${index}-${adoptable.id}`"
     >
       <Adoptable
-        :id="match.adoptable.id"
-        :repository="match.adoptable.repository"
-        :description="match.adoptable.description"
-        :readme="match.adoptable.readme"
+        :id="adoptable.id"
+        :repository="adoptable.repository"
+        :description="adoptable.description"
+        :readme="adoptable.readme"
       />
     </li>
   </ul>
@@ -24,7 +26,22 @@
     name: "MatchedAdoptables",
     components: { Adoptable },
     computed: {
-      ...mapGetters("mymatches", ["matches"]),
+      ...mapGetters("mymatches", ["matches", "loadingMatches"]),
+    },
+    data() {
+      return {
+        staticMatches: [],
+      };
+    },
+    watch: {
+      matches: function(newMatches, oldMatches) {
+        if (newMatches.length >= oldMatches.length) {
+          this.staticMatches = newMatches;
+        }
+      },
+    },
+    created() {
+      this.staticMatches = this.matches;
     },
   });
 </script>
