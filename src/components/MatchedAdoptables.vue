@@ -34,8 +34,8 @@
       };
     },
     watch: {
-      matches: function(newMatches, oldMatches) {
-        if (newMatches.length >= oldMatches.length) {
+      matches: function(newMatches) {
+        if (newMatches.length >= this.staticMatches.length) {
           this.staticMatches = newMatches;
         }
       },
