@@ -10,7 +10,7 @@
         <el-col :span="6">
           <el-row type="flex" justify="end">
             <el-button type="primary" @click="toggleMatch">
-              {{ this?.match ? "Unmatch" : "Match" }}
+              {{ match ? "Unmatch" : "Match" }}
             </el-button>
           </el-row>
         </el-col>
@@ -45,40 +45,72 @@
       readme: {
         type: String,
       },
-      match: {
-        optional: true,
-        type: Object,
-      },
+    },
+    data() {
+      return {
+        match: null,
+      };
+    },
+    created() {
+      // @ts-ignore
+      this.match = true;
     },
     methods: {
       toggleMatch() {
-        graphql
-          .mutate({
-            mutation: gql`
-              mutation($repository: String!) {
-                createMatch(repository: $repository) {
-                  match {
-                    user
-                    repository
+        const { mutation, success, error } = this.match
+          ? {
+              mutation: gql`
+                mutation($repositoryId: String!) {
+                  deleteMatch(repositoryId: $repositoryId) {
+                    match {
+                      id
+                    }
                   }
                 }
-              }
-            `,
+              `,
+              success: {
+                title: "Deleted match",
+                description: `You have unmatched ${this.repository}.`,
+              },
+              error: {
+                title: "Could not unmatch",
+                desciption: `RepoAdopt could not unmatch ${this.repository}.`,
+              },
+            }
+          : {
+              mutation: gql`
+                mutation($repositoryId: String!) {
+                  createMatch(repositoryId: $repositoryId) {
+                    match {
+                      id
+                      user
+                      repositoryId
+                    }
+                  }
+                }
+              `,
+              success: {
+                title: "Created match",
+                description: `You have been matched with ${this.repository}.`,
+              },
+              error: {
+                title: "Could not match",
+                desciption: `RepoAdopt could not create a match on ${this.repository} for you.`,
+              },
+            };
+
+        graphql
+          .mutate({
+            mutation,
             variables: {
-              repository: this.id,
+              repositoryId: this.id,
             },
           })
           .then(() => {
-            showSuccess(
-              "Created match",
-              `You have been matched with ${this.repository}.`,
-            );
+            showSuccess(success.title, success.description);
           })
           .catch(() => {
-            showError(
-              "Could not match",
-              `RepoAdopt could not create a match on ${this.repository} for you.`,
-            );
+            showError(error.title, error.desciption);
           });
       },
     },
