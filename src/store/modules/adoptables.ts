@@ -4,6 +4,7 @@ import Apollo from "@/apollo";
 import Octokit from "@/octokit";
 
 interface Adoptable {
+  id: string;
   repository: string;
   description: string;
   readme: string;
@@ -58,7 +59,9 @@ const actions = {
       query: gql`
         query($page: Int!, $limit: Int!) {
           adoptable(page: $page, limit: $limit) {
+            id
             repository
+            description
           }
         }
       `,

@@ -69,7 +69,7 @@
           type="textarea"
           resize="none"
           :rows="10"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -84,9 +84,10 @@
   import { mapActions, mapGetters } from "vuex";
   import apollo from "@/apollo";
   import gql from "graphql-tag";
-  import { ElNotification } from "element-plus";
 
   import SignIn from "@/components/SignIn.vue";
+
+  import { showSuccess, showError } from "@/components/notifications";
 
   export default defineComponent({
     name: "navbar",
@@ -145,33 +146,14 @@
             this.dialogFormVisible = false;
             this.form.repository = null;
             this.form.description = "";
-            this.showSuccess(
+            showSuccess(
               "Succefully added repository",
               "Your repository has been added to RepoAdopt",
             );
           })
           .catch(() => {
-            this.showError(
-              "Could not add",
-              "Select a repository from the dropdown",
-            );
+            showError("Could not add", "Select a repository from the dropdown");
           });
-      },
-      showError: function(title: string, message: string) {
-        ElNotification({
-          title: title,
-          message: message,
-          position: "bottom-right",
-          type: "error",
-        });
-      },
-      showSuccess: function(title: string, message: string) {
-        ElNotification({
-          title: title,
-          message: message,
-          position: "bottom-right",
-          type: "success",
-        });
       },
     },
     created() {
