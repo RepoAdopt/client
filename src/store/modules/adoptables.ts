@@ -17,6 +17,35 @@ interface State {
   canFetch: boolean;
 }
 
+export function getReadme(
+  adoptable: Adoptable,
+  cb: (adoptable: Adoptable) => void,
+) {
+  const [owner, repo] = adoptable.repository.split("/", 2);
+
+  Octokit()
+    .repos.getContent({ owner, repo, path: "README.md" })
+    .then((res) => {
+      // TODO When fixed remove ignore
+      // @ts-ignore: Unreachable code error
+      if (!res?.data?.content) {
+        cb(adoptable);
+        return;
+      }
+
+      // @ts-ignore: Unreachable code error
+      const readme = atob(res.data.content);
+
+      adoptable.readme = readme;
+
+      cb(adoptable);
+    })
+    .catch((error) => {
+      console.error(error);
+      cb(adoptable);
+    });
+}
+
 const state = () => ({
   adoptables: [],
   page: 0,
@@ -75,28 +104,9 @@ const actions = {
         root.commit("finishFetch");
 
         result.data.adoptable.forEach((adoptable: Adoptable) => {
-          const [owner, repo] = adoptable.repository.split("/", 2);
-
-          Octokit()
-            .repos.getContent({ owner, repo, path: "README.md" })
-            .then((res) => {
-              // TODO When fixed remove ignore
-              // @ts-ignore: Unreachable code error
-              if (!res?.data?.content) {
-                return;
-              }
-
-              // @ts-ignore: Unreachable code error
-              const readme = atob(res.data.content);
-
-              adoptable.readme = readme;
-            })
-            .catch((error) => {
-              console.error(error);
-            })
-            .finally(() => {
-              root.commit("addAdoptable", { adoptables: adoptable });
-            });
+          getReadme(adoptable, function(adoptableWithReadme) {
+            root.commit("addAdoptable", { adoptables: adoptableWithReadme });
+          });
         });
       })
       .catch((err) => {

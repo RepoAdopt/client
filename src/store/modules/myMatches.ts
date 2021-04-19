@@ -1,8 +1,10 @@
 import apollo from "@/apollo";
 import gql from "graphql-tag";
-import { Adoptable } from "./adoptables";
+
+import { Adoptable, getReadme } from "./adoptables";
 
 interface Match {
+  id: string;
   user: string;
   adoptable: Adoptable;
 }
@@ -25,10 +27,8 @@ const getters = {
   matches: (state: State) => {
     return state.matches;
   },
-  get_match: (state: State, repository_id: string) => {
-    return state.matches.filter(
-      (match) => match.adoptable.id === repository_id,
-    );
+  hasMatch: (state: State) => (repository_id: string) => {
+    return state.matches.some((match) => match.adoptable.id === repository_id);
   },
 };
 
@@ -44,7 +44,7 @@ const actions = {
               adoptable {
                 id
                 repository
-								description
+                description
                 owner
               }
             }
@@ -52,14 +52,28 @@ const actions = {
         `,
       })
       .then((res) => {
-        root.commit("addMatches", { matches: res.data.myMatches });
+        res.data.myMatches.forEach((match: Match) => {
+          getReadme(match.adoptable, function(adoptable) {
+            match.adoptable = adoptable;
+            root.commit("addMatches", { matches: [match] });
+          });
+        });
       });
+  },
+  addMatch(root: Root, params: { match: Match }) {
+    root.commit("addMatches", { matches: [params.match] });
+  },
+  removeMatch(root: Root, params: { id: string }) {
+    root.commit("removeMatch", { id: params.id });
   },
 };
 
 const mutations = {
   addMatches(state: State, params: { matches: Array<Match> }) {
     state.matches = [...state.matches, ...params.matches];
+  },
+  removeMatch(state: State, params: { id: string }) {
+    state.matches = state.matches.filter((match) => match.id !== params.id);
   },
 };
 

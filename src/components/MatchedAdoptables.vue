@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul class="match-list">
     <li
       v-for="(match, index) in matches"
       :key="`adoptable:${index}-${match.id}`"
@@ -16,15 +16,21 @@
 
 <script>
   import { defineComponent } from "vue";
-	import { mapGetters } from "vuex"
+  import { mapGetters } from "vuex";
 
   import Adoptable from "./Adoptable.vue";
 
   export default defineComponent({
     name: "MatchedAdoptables",
     components: { Adoptable },
-		computed: {
-			...mapGetters("mymatches", ["matches"])
-		}
+    computed: {
+      ...mapGetters("mymatches", ["matches"]),
+    },
   });
 </script>
+
+<style scoped>
+  .match-list {
+    margin: 0 10px;
+  }
+</style>
