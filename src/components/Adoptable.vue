@@ -60,8 +60,8 @@
         const { mutation, success, error } = this.match
           ? {
               mutation: gql`
-                mutation($repositoryId: String!) {
-                  deleteMatch(repositoryId: $repositoryId) {
+                mutation($adoptable: String!) {
+                  deleteMatch(adoptable: $adoptable) {
                     match {
                       id
                     }
@@ -79,12 +79,11 @@
             }
           : {
               mutation: gql`
-                mutation($repositoryId: String!) {
-                  createMatch(repositoryId: $repositoryId) {
+                mutation($adoptable: String!) {
+                  createMatch(adoptable: $adoptable) {
                     match {
                       id
                       user
-                      repositoryId
                     }
                   }
                 }
@@ -103,7 +102,7 @@
           .mutate({
             mutation,
             variables: {
-              repositoryId: this.id,
+              adoptable: this.id,
             },
           })
           .then(() => {
