@@ -24,6 +24,7 @@
 
 <script lang="ts">
   import { defineComponent } from "vue";
+  import { mapGetters, mapActions } from "vuex";
   import gql from "graphql-tag";
 
   import graphql from "@/apollo";
@@ -46,22 +47,21 @@
         type: String,
       },
     },
-    data() {
-      return {
-        match: null,
-      };
-    },
-    created() {
-      // @ts-ignore
-      this.match = true;
+    computed: {
+      ...mapGetters("mymatches", ["hasMatch"]),
+      match() {
+        // @ts-ignore this is defined
+        return this.hasMatch(this.id);
+      },
     },
     methods: {
+      ...mapActions("mymatches", ["removeMatch", "addMatch"]),
       toggleMatch() {
-        const { mutation, success, error } = this.match
+        const { mutation, success, error, handler } = this.match
           ? {
               mutation: gql`
-                mutation($repositoryId: String!) {
-                  deleteMatch(repositoryId: $repositoryId) {
+                mutation($adoptable: String!) {
+                  deleteMatch(adoptable: $adoptable) {
                     match {
                       id
                     }
@@ -76,15 +76,23 @@
                 title: "Could not unmatch",
                 desciption: `RepoAdopt could not unmatch ${this.repository}.`,
               },
+              handler: (res: any) => {
+                this.removeMatch({ id: res.deleteMatch.match.id });
+              },
             }
           : {
               mutation: gql`
-                mutation($repositoryId: String!) {
-                  createMatch(repositoryId: $repositoryId) {
+                mutation($adoptable: String!) {
+                  createMatch(adoptable: $adoptable) {
                     match {
                       id
                       user
-                      repositoryId
+                      adoptable {
+                        id
+                        owner
+                        repository
+                        description
+                      }
                     }
                   }
                 }
@@ -97,16 +105,20 @@
                 title: "Could not match",
                 desciption: `RepoAdopt could not create a match on ${this.repository} for you.`,
               },
+              handler: (res: any) => {
+                this.addMatch({ match: res.createMatch.match });
+              },
             };
 
         graphql
           .mutate({
             mutation,
             variables: {
-              repositoryId: this.id,
+              adoptable: this.id,
             },
           })
-          .then(() => {
+          .then((res) => {
+            handler(res.data);
             showSuccess(success.title, success.description);
           })
           .catch(() => {
