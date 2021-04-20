@@ -35,7 +35,7 @@
     },
     watch: {
       matches: function(newMatches) {
-        if (newMatches.length >= this.staticMatches.length) {
+        if (newMatches.length > this.staticMatches.length) {
           this.staticMatches = newMatches;
         }
       },
