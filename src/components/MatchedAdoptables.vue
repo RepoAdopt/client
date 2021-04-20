@@ -26,7 +26,7 @@
     name: "MatchedAdoptables",
     components: { Adoptable },
     computed: {
-      ...mapGetters("mymatches", ["matches", "loadingMatches"]),
+      ...mapGetters("mymatches", ["matches"]),
     },
     data() {
       return {
