@@ -61,7 +61,10 @@ const actions = {
       });
   },
   addMatch(root: Root, params: { match: Match }) {
-    root.commit("addMatches", { matches: [params.match] });
+    getReadme(params.match.adoptable, function(adoptable) {
+      params.match.adoptable = adoptable;
+      root.commit("addMatches", { matches: [params.match] });
+    });
   },
   removeMatch(root: Root, params: { id: string }) {
     root.commit("removeMatch", { id: params.id });
