@@ -1,10 +1,12 @@
 import axios from "axios";
 import Store from "@/store";
+import Config from "@/config.loader";
 
-const url = process.env.VUE_APP_AXIOS;
+// const url = process.env.VUE_APP_AXIOS;
+const url = Config("VUE_APP_GRAPHQL");
 
 const api = axios.create({
-  baseURL: url
+  baseURL: url,
 });
 
 axios.interceptors.request.use(

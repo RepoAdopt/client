@@ -4,9 +4,11 @@ import Api from "@/api";
 import Store from "@/store";
 
 import routes from "./routes";
+import Config from "@/config.loader";
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  // history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(Config("BASE_URL")),
   routes,
 });
 
@@ -19,7 +21,8 @@ router.beforeEach((to, from, next) => {
       {},
       {
         params: {
-          client_id: process.env.VUE_APP_CLIENT_ID,
+          // client_id: process.env.VUE_APP_CLIENT_ID,
+          client_id: Config("VUE_APP_CLIENT_ID"),
           code: to.redirectedFrom.query.code,
         },
       },

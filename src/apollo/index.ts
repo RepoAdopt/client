@@ -3,8 +3,10 @@ import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { setContext } from "apollo-link-context";
 import Store from "@/store";
+import Config from "../config.loader";
 
-const url = process.env.VUE_APP_GRAPHQL;
+// const url = process.env.VUE_APP_GRAPHQL;
+const url = Config("VUE_APP_GRAPHQL");
 
 const link = createHttpLink({
   uri: url + "/graphql",
@@ -28,7 +30,7 @@ const cache = new InMemoryCache();
 
 const apollo = new ApolloClient({
   link: authLink.concat(link),
-  cache
+  cache,
 });
 
 export default apollo;
