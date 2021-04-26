@@ -3,10 +3,11 @@ import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { setContext } from "apollo-link-context";
 import Store from "@/store";
-import Config from "../config.loader";
 
-// const url = process.env.VUE_APP_GRAPHQL;
-const url = Config("VUE_APP_GRAPHQL");
+// @ts-ignore: Unreachable code error
+const url = window.config.VUE_APP_GRAPHQL;
+
+console.log(url);
 
 const link = createHttpLink({
   uri: url + "/graphql",

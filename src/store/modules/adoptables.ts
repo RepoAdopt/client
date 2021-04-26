@@ -2,7 +2,6 @@ import gql from "graphql-tag";
 
 import Apollo from "@/apollo";
 import Octokit from "@/octokit";
-import Config from "@/config.loader";
 
 export interface Adoptable {
   id: string;
@@ -97,8 +96,8 @@ const actions = {
       `,
       variables: {
         page: root.state.page,
-        // limit: process.env.VUE_APP_PAGINATION_LIMIT,
-        limit: Config("VUE_APP_PAGINATION_LIMIT"),
+        // @ts-ignore: Unreachable code error
+        limit: window.config.VUE_APP_PAGINATION_LIMIT,
       },
     })
       .then((result) => {

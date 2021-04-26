@@ -1,9 +1,10 @@
 import axios from "axios";
 import Store from "@/store";
-import Config from "@/config.loader";
 
-// const url = process.env.VUE_APP_AXIOS;
-const url = Config("VUE_APP_GRAPHQL");
+// @ts-ignore: Unreachable code error
+const url = window.config.VUE_APP_AXIOS;
+
+console.log(url);
 
 const api = axios.create({
   baseURL: url,
