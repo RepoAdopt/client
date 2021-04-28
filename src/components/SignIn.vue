@@ -14,21 +14,27 @@
 
 <script lang="ts">
   import { defineComponent } from "vue";
+  import returnClientId from "@/components/getClientId";
 
   export default defineComponent({
     name: "SignIn",
     data() {
       return {
-        link: `https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.VUE_APP_CLIENT_ID}`,
+        link: `https://github.com/login/oauth/authorize?scope=user:email&client_id=${returnClientId()}`,
       };
     },
     // computed: {
     //   link: function() {
     //     console.log(window)
-    //     console.log(window.config)
     //     return `https://github.com/login/oauth/authorize?scope=user:email&client_id=${window.config.VUE_APP_CLIENT_ID}`
     //   },
     // },
+    // methods: {
+    //   link: function () {
+    //     console.log(window.config)
+    //     return `https://github.com/login/oauth/authorize?scope=user:email&client_id=${window.config.VUE_APP_CLIENT_ID}`
+    //   }
+    // }
   });
 </script>
 
