@@ -14,12 +14,13 @@
 
 <script lang="ts">
   import { defineComponent } from "vue";
+  import returnClientId from "@/components/getClientId";
 
   export default defineComponent({
     name: "SignIn",
     data() {
       return {
-        link: `https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.VUE_APP_CLIENT_ID}`,
+        link: `https://github.com/login/oauth/authorize?scope=user:email&client_id=${returnClientId()}`,
       };
     },
   });

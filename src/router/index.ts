@@ -19,7 +19,8 @@ router.beforeEach((to, from, next) => {
       {},
       {
         params: {
-          client_id: process.env.VUE_APP_CLIENT_ID,
+          // @ts-ignore: config does exist
+          client_id: window.config.VUE_APP_CLIENT_ID,
           code: to.redirectedFrom.query.code,
         },
       },

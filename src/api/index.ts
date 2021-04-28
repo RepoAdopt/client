@@ -1,10 +1,11 @@
 import axios from "axios";
 import Store from "@/store";
 
-const url = process.env.VUE_APP_AXIOS;
+// @ts-ignore: config does exist
+const url = window.config.VUE_APP_AXIOS;
 
 const api = axios.create({
-  baseURL: url
+  baseURL: url,
 });
 
 axios.interceptors.request.use(

@@ -96,7 +96,8 @@ const actions = {
       `,
       variables: {
         page: root.state.page,
-        limit: process.env.VUE_APP_PAGINATION_LIMIT,
+        // @ts-ignore: Unreachable code error
+        limit: window.config.VUE_APP_PAGINATION_LIMIT,
       },
     })
       .then((result) => {
