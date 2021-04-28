@@ -1,7 +1,6 @@
 <template>
   <navbar />
   <el-container class="container">
-    {{window?.config}} here
     <router-view />
   </el-container>
 </template>

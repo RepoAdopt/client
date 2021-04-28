@@ -19,7 +19,7 @@ router.beforeEach((to, from, next) => {
       {},
       {
         params: {
-          // @ts-ignore: Unreachable code error
+          // @ts-ignore: config does exist
           client_id: window.config.VUE_APP_CLIENT_ID,
           code: to.redirectedFrom.query.code,
         },

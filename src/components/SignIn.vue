@@ -23,18 +23,6 @@
         link: `https://github.com/login/oauth/authorize?scope=user:email&client_id=${returnClientId()}`,
       };
     },
-    // computed: {
-    //   link: function() {
-    //     console.log(window)
-    //     return `https://github.com/login/oauth/authorize?scope=user:email&client_id=${window.config.VUE_APP_CLIENT_ID}`
-    //   },
-    // },
-    // methods: {
-    //   link: function () {
-    //     console.log(window.config)
-    //     return `https://github.com/login/oauth/authorize?scope=user:email&client_id=${window.config.VUE_APP_CLIENT_ID}`
-    //   }
-    // }
   });
 </script>
 
