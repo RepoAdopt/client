@@ -1,7 +1,6 @@
 <template>
   <el-col :span="6" class="padding max-height">
-    <OwnRepositories v-if="githubToken && user" />
-    <div v-else>Not logged in</div>
+    <router-view name="leftView" v-if="githubToken && user"/>
   </el-col>
 
   <el-col :span="12" class="max-height">
@@ -10,8 +9,7 @@
   </el-col>
 
   <el-col :span="6" class="padding max-height">
-    <div v-if="githubToken && user">right</div>
-    <div v-else>Not logged in</div>
+    <router-view name="rightView"/>
   </el-col>
 </template>
 
@@ -19,11 +17,8 @@
   import { defineComponent } from "vue";
   import { mapGetters } from "vuex";
 
-  import OwnRepositories from "@/components/OwnAdoptables.vue";
-
   export default defineComponent({
     name: "Dashboard",
-    components: { OwnRepositories },
     computed: {
       ...mapGetters("user", ["githubToken", "user"]),
     },

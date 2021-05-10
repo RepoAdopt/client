@@ -7,10 +7,12 @@
       :key="`adoptable:${index}-${adoptable.id}`"
     >
       <Adoptable
+        class="clickable"
         :id="adoptable.id"
         :repository="adoptable.repository"
         :description="adoptable.description"
         :readme="adoptable.readme"
+        v-on:click="goToAdoptableChat(adoptable)"
       />
     </li>
   </ul>
@@ -33,6 +35,11 @@
         staticMatches: [],
       };
     },
+    methods: {
+      goToAdoptableChat: function(adoptable) {
+        this.$router.push({ name: "AdoptableChat", params: {id: adoptable.id, description: adoptable.description, repository: adoptable.repository, readme: adoptable.readme} })
+      }
+    },
     watch: {
       matches: function(newMatches) {
         if (newMatches.length > this.staticMatches.length) {
@@ -49,5 +56,9 @@
 <style scoped>
   .match-list {
     margin: 0 10px;
+  }
+
+  .clickable {
+    cursor: pointer;
   }
 </style>

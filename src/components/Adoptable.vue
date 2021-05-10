@@ -54,6 +54,12 @@
         return this.hasMatch(this.id);
       },
     },
+    mounted() {
+      console.log(this.id)
+      console.log(this.description)
+      console.log(this.repository)
+      console.log(this.readme)
+    },
     methods: {
       ...mapActions("mymatches", ["removeMatch", "addMatch"]),
       toggleMatch() {
