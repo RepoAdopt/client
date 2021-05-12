@@ -37,7 +37,7 @@
     },
     methods: {
       goToAdoptableChat: function(adoptable) {
-        this.$router.push({ name: "AdoptableChat", params: {id: adoptable.id, description: adoptable.description, repository: adoptable.repository, readme: adoptable.readme} })
+        this.$router.push({ name: "AdoptableChat", params: {id: adoptable.id} })
       }
     },
     watch: {

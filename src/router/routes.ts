@@ -6,7 +6,7 @@ import MatchedAdoptables from "@/components/MatchedAdoptables.vue";
 import InfiniteList from "@/components/InfiniteList.vue";
 import AdoptableChat from "@/components/AdoptableChat.vue";
 import MatchedUsers from "@/components/MatchedUsers.vue";
-import Adoptable from "@/components/Adoptable.vue";
+import CurrentAdoptableChat from "@/components/CurrentAdoptableChat.vue";
 
 const routes: Array<RouteRecordRaw> = [
   { path: "/:any*", redirect: { name: "Dashboard" } },
@@ -29,11 +29,11 @@ const routes: Array<RouteRecordRaw> = [
         component: MatchedAdoptables,
       },
       {
-        path: "/adoptablechat/",
+        path: "/adoptablechat/:id",
         name: "AdoptableChat",
         components: {
           default: AdoptableChat,
-          leftView: Adoptable,
+          leftView: CurrentAdoptableChat,
           rightView: MatchedUsers,
         },
         props: true,

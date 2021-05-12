@@ -2,12 +2,12 @@
   <el-card shadow="hover" class="card">
     <template #header>
       <el-row type="flex" justify="space-between">
-        <el-col :span="18">
+        <el-col :span="18" v-on:click="OpenUrlInNewTab(html_url)" class="clickable">
           <h1 class="name">
             <b>{{ repository }}</b>
           </h1>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" v-if="showButton">
           <el-row type="flex" justify="end">
             <el-button type="primary" @click="toggleMatch">
               {{ match ? "Unmatch" : "Match" }}
@@ -46,6 +46,13 @@
       readme: {
         type: String,
       },
+      html_url: {
+        type: String,
+      },
+      showButton: {
+        type: Boolean,
+        default: true
+      }
     },
     computed: {
       ...mapGetters("mymatches", ["hasMatch"]),
@@ -53,12 +60,6 @@
         // @ts-ignore this is defined
         return this.hasMatch(this.id);
       },
-    },
-    mounted() {
-      console.log(this.id)
-      console.log(this.description)
-      console.log(this.repository)
-      console.log(this.readme)
     },
     methods: {
       ...mapActions("mymatches", ["removeMatch", "addMatch"]),
@@ -131,6 +132,10 @@
             showError(error.title, error.desciption);
           });
       },
+
+      OpenUrlInNewTab(url: string) {
+        window.open(url)
+      }
     },
   });
 </script>
@@ -146,5 +151,9 @@
 
   .name {
     word-break: break-all;
+  }
+
+  .clickable {
+    cursor: pointer;
   }
 </style>

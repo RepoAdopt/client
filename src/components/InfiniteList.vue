@@ -4,6 +4,7 @@
       v-for="(adoptable, index) in adoptables"
       :key="`adoptable:${index}-${adoptable.repository}`"
     >
+      {{adoptable}}
       <Adoptable
         :id="adoptable.id"
         :repository="adoptable.repository"

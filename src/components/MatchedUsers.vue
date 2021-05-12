@@ -5,31 +5,43 @@
     <h1>People</h1>
     </template>
     <li
-        v-for="(user, index) in adoptableMessages.users"
+        v-for="(user, index) in users"
         :key="`message:${index}-${user}`"
     >
       <el-divider v-if="index !== 0"/>
-<!--      TODO get user images from github-->
-      {{ user }}
+      <el-row align="middle" type="flex" v-on:click="OpenUrlInNewTab(user.html_url)" class="clickable">
+        <el-avatar class="avatar" :src="user.avatar_url" />
+        {{ user.login }}
+      </el-row>
     </li>
   </el-card>
 </template>
 
 <script>
 
+import {mapGetters} from "vuex";
+
 export default {
   name: "MatchedUsers",
-  data() {
-    return {
-      adoptableMessages: {
-        chat: [{"message": "test", "user": "testuser"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "testuser"}, {"message": "testmessage uno", "user": "testuser"}],
-        users: ["user1", "user2"]
-      }
-    };
+  props: [
+      "id"
+  ],
+  computed: {
+    ...mapGetters("adoptableChat", ["users"]),
   },
+  methods: {
+    OpenUrlInNewTab(url) {
+      window.open(url)
+    }
+  }
 }
 </script>
 
 <style scoped>
-
+.avatar {
+  margin-right: 10px;
+}
+.clickable {
+  cursor: pointer;
+}
 </style>

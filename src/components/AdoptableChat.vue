@@ -4,7 +4,7 @@
   <el-container class="full-height-container">
     <el-main id="chat">
       <li
-          v-for="(chatmessage, index) in adoptableMessages.chat"
+          v-for="(chatmessage, index) in chatMessages"
           :key="`message:${index}-${chatmessage.message}`"
       >
         <Message
@@ -23,39 +23,86 @@
 
 <script>
 import { ref } from 'vue'
-import Message from "@/components/Message";
-import {mapGetters} from "vuex";
+import Message from "@/components/Message.vue";
+import {mapActions, mapGetters} from "vuex";
+import apollo from "@/apollo";
+import gql from "graphql-tag";
+import {showError} from "@/components/notifications";
 
 export default {
   name: "AdoptableChat",
   components: { Message },
+  props: [
+      "id"
+  ],
   data() {
     return {
       adoptableMessages: {
-        chat: [{"message": "test", "user": "testuser"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "BeauTaapken"}, {"message": "testmessage uno", "user": "testuser"}, {"message": "testmessage uno", "user": "testuser"}],
         users: ["user1", "user2"]
       },
-      chatMessage: ref('')
+      chatMessage: ref(''),
     };
   },
-  mounted() {
-    this.scrollToBottom()
-  },
-  methods: {
-    sendMessage: function() {
-    //  TODO send chatmessage with username to graphql and show add the message to the array
-      this.adoptableMessages.chat.push({"message": this.chatMessage, "user": this.user?.login})
-      this.chatMessage = ""
-      setTimeout(this.scrollToBottom, 50)
-    },
-    scrollToBottom: function() {
-      const chat = document.getElementById("chat")
-      chat.scrollTop = chat.scrollHeight
+  // mounted() {
+  //   this.scrollToBottom()
+  // },
+  watch: {
+    chatMessages: function(newMessages, oldMessages) {
+      if(newMessages.length > oldMessages.length) {
+
+        this.scrollToBottom()
+      }
     }
   },
   computed: {
-    ...mapGetters("user", ["githubToken", "user"]),
+    ...mapGetters("user", ["user"]),
+    ...mapGetters("adoptableChat", ["chatMessages", "chatId"]),
   },
+  methods: {
+    ...mapActions("adoptableChat", ["init", "appendChatMessage"]),
+    sendMessage: function() {
+      if(this.chatMessage.length){
+        //  TODO send chatmessage with username to graphql and show add the message to the array
+        apollo
+            .mutate({
+              mutation: gql`
+              mutation($chatId: String! $message: String!) {
+                postChatMessage(chatId: $chatId message: $message){
+                  chatMessage {
+                    message,
+                    user
+                  }
+                }
+              }
+            `,
+              variables: {
+                chatId: this.chatId,
+                message: this.chatMessage,
+              },
+            })
+            .then((response) => {
+              this.chatMessage = ""
+              this.appendChatMessage({
+                chatMessage: response.data.postChatMessage.chatMessage,
+              });
+              this.scrollToBottom();
+            })
+            .catch(() => {
+              showError("Could not send", "Something went wrong while sending a message.");
+            });
+
+      }
+    },
+    scrollToBottom: function() {
+      const chat = document.getElementById("chat")
+      setTimeout(function() {
+        chat.scrollTop = chat.scrollHeight
+      }, 50)
+    }
+  },
+  created() {
+    this.init({ id: this.id });
+  }
 }
 </script>
 
