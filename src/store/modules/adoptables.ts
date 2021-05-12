@@ -55,11 +55,11 @@ export function getUrl(
   Octokit()
     .repos.get({ owner, repo })
     .then((res) => {
-      console.log(res.data.html_url);
       if (!res.data.html_url) {
         cb(adoptable);
         return;
       }
+      adoptable.html_url = res.data.html_url;
       cb(adoptable);
     })
     .catch((error) => {
@@ -128,7 +128,6 @@ const actions = {
 
         result.data.adoptable.forEach((adoptable: Adoptable) => {
           getUrl(adoptable, function(adoptableWithUrl) {
-            console.log(adoptableWithUrl);
             getReadme(adoptableWithUrl, function(adoptableWithReadme) {
               root.commit("addAdoptable", { adoptables: adoptableWithReadme });
             });

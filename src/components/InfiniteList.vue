@@ -4,12 +4,12 @@
       v-for="(adoptable, index) in adoptables"
       :key="`adoptable:${index}-${adoptable.repository}`"
     >
-      {{adoptable}}
       <Adoptable
         :id="adoptable.id"
         :repository="adoptable.repository"
         :description="adoptable.description"
         :readme="adoptable.readme"
+        :html_url="adoptable.html_url"
       />
     </li>
   </ul>

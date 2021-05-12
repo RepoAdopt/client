@@ -134,7 +134,9 @@
       },
 
       OpenUrlInNewTab(url: string) {
-        window.open(url)
+        if(url){
+          window.open(url)
+        }
       }
     },
   });

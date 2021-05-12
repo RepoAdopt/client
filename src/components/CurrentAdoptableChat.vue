@@ -5,12 +5,12 @@
       )"
       :key="`adoptable:${index}-${adoptable.id}`"
   >
-    {{adoptable}}
     <Adoptable v-if="adoptable.id === id"
         :id="adoptable.id"
         :repository="adoptable.repository"
         :description="adoptable.description"
         :readme="adoptable.readme"
+        :html_url="adoptable.html_url"
         :show-button="false"
     />
   </li>
