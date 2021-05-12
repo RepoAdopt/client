@@ -1,6 +1,4 @@
 <template>
-
-<!--  TODO place for each chatmessage in array with el-devider in between when api call exists and is called-->
   <el-container class="full-height-container">
     <el-main id="chat">
       <li
@@ -62,7 +60,6 @@ export default {
     ...mapActions("adoptableChat", ["init", "appendChatMessage"]),
     sendMessage: function() {
       if(this.chatMessage.length){
-        //  TODO send chatmessage with username to graphql and show add the message to the array
         apollo
             .mutate({
               mutation: gql`

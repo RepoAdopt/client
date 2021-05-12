@@ -4,7 +4,6 @@
   </el-col>
 
   <el-col :span="12" class="max-height">
-    <!--TODO make it so correct item is loaded depending on user navigation(example: chat)-->
     <router-view />
   </el-col>
 
