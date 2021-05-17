@@ -4,7 +4,7 @@
       <el-row align="middle" type="flex">
         <el-image
           class="icon"
-          src="https://github.githubassets.com/pinned-octocat.svg"
+          src="https://github.githubassets.com/favicon.ico"
         />
         Sign in with GitHub
       </el-row>
