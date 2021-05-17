@@ -7,7 +7,7 @@
             <el-menu-item :route="{ name: 'Dashboard' }" index="0">
               RepoAdopt
             </el-menu-item>
-            <el-menu-item :route="{ name: 'MyMatches' }" index="1">
+            <el-menu-item :route="{ name: 'MyMatches' }" index="1" v-if="githubToken && user">
               My matches
             </el-menu-item>
           </el-row>

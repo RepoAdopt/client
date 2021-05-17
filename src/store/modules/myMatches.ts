@@ -1,7 +1,7 @@
 import apollo from "@/apollo";
 import gql from "graphql-tag";
 
-import { Adoptable, getReadme } from "./adoptables";
+import { Adoptable, getReadme, getUrl } from "./adoptables";
 
 interface Match {
   id: string;
@@ -53,17 +53,21 @@ const actions = {
       })
       .then((res) => {
         res.data.myMatches.forEach((match: Match) => {
-          getReadme(match.adoptable, function(adoptable) {
-            match.adoptable = adoptable;
-            root.commit("addMatches", { matches: [match] });
+          getUrl(match.adoptable, function(adoptableWithUrl) {
+            getReadme(adoptableWithUrl, function(adoptableWithReadme) {
+              match.adoptable = adoptableWithReadme;
+              root.commit("addMatches", { matches: [match] });
+            });
           });
         });
       });
   },
   addMatch(root: Root, params: { match: Match }) {
-    getReadme(params.match.adoptable, function(adoptable) {
-      params.match.adoptable = adoptable;
-      root.commit("addMatches", { matches: [params.match] });
+    getUrl(params.match.adoptable, function(adoptableWithUrl) {
+      getReadme(adoptableWithUrl, function(adoptable) {
+        params.match.adoptable = adoptable;
+        root.commit("addMatches", { matches: [params.match] });
+      });
     });
   },
   removeMatch(root: Root, params: { id: string }) {

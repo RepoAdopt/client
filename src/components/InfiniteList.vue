@@ -9,6 +9,7 @@
         :repository="adoptable.repository"
         :description="adoptable.description"
         :readme="adoptable.readme"
+        :html_url="adoptable.html_url"
       />
     </li>
   </ul>

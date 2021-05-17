@@ -8,6 +8,7 @@ export interface Adoptable {
   repository: string;
   description: string;
   readme: string;
+  html_url: string;
 }
 
 interface State {
@@ -38,6 +39,27 @@ export function getReadme(
 
       adoptable.readme = readme;
 
+      cb(adoptable);
+    })
+    .catch((error) => {
+      console.error(error);
+      cb(adoptable);
+    });
+}
+
+export function getUrl(
+  adoptable: Adoptable,
+  cb: (adoptable: Adoptable) => void,
+) {
+  const [owner, repo] = adoptable.repository.split("/", 2);
+  Octokit()
+    .repos.get({ owner, repo })
+    .then((res) => {
+      if (!res.data.html_url) {
+        cb(adoptable);
+        return;
+      }
+      adoptable.html_url = res.data.html_url;
       cb(adoptable);
     })
     .catch((error) => {
@@ -105,8 +127,10 @@ const actions = {
         root.commit("finishFetch");
 
         result.data.adoptable.forEach((adoptable: Adoptable) => {
-          getReadme(adoptable, function(adoptableWithReadme) {
-            root.commit("addAdoptable", { adoptables: adoptableWithReadme });
+          getUrl(adoptable, function(adoptableWithUrl) {
+            getReadme(adoptableWithUrl, function(adoptableWithReadme) {
+              root.commit("addAdoptable", { adoptables: adoptableWithReadme });
+            });
           });
         });
       })
