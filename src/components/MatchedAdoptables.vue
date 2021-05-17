@@ -57,8 +57,4 @@
   .match-list {
     margin: 0 10px;
   }
-
-  .clickable {
-    cursor: pointer;
-  }
 </style>

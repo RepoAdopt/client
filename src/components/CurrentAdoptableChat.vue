@@ -11,7 +11,7 @@
         :description="adoptable.description"
         :readme="adoptable.readme"
         :html_url="adoptable.html_url"
-        :show-button="false"
+        :show_match_button="false"
     />
   </li>
 
@@ -19,36 +19,32 @@
 
 <script>
 
-import {mapGetters} from "vuex";
-import Adoptable from "@/components/Adoptable";
+  import {mapGetters} from "vuex";
+  import Adoptable from "@/components/Adoptable";
 
-export default {
-  name: "CurrentAdoptableChat",
-  components: { Adoptable },
-  data() {
-    return {
-      adoptables: [],
-    };
-  },
-  props: {
-    id: {
-      type: String,
+  export default {
+    name: "CurrentAdoptableChat",
+    components: { Adoptable },
+    data() {
+      return {
+        adoptables: [],
+      };
     },
-  },
-  computed: {
-    ...mapGetters("mymatches", ["matches"]),
-  },
-  watch: {
-    matches: function(match) {
-      this.adoptables = match;
+    props: {
+      id: {
+        type: String,
+      },
     },
-  },
-  created() {
-    this.adoptables = this.matches;
-  },
-}
+    computed: {
+      ...mapGetters("mymatches", ["matches"]),
+    },
+    watch: {
+      matches: function(match) {
+        this.adoptables = match;
+      },
+    },
+    created() {
+      this.adoptables = this.matches;
+    },
+  }
 </script>
-
-<style scoped>
-
-</style>

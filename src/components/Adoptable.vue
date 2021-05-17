@@ -49,7 +49,7 @@
       html_url: {
         type: String,
       },
-      showButton: {
+      show_match_button: {
         type: Boolean,
         default: true
       }
@@ -153,9 +153,5 @@
 
   .name {
     word-break: break-all;
-  }
-
-  .clickable {
-    cursor: pointer;
   }
 </style>

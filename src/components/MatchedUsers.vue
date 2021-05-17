@@ -38,10 +38,7 @@ export default {
 </script>
 
 <style scoped>
-.avatar {
-  margin-right: 10px;
-}
-.clickable {
-  cursor: pointer;
-}
+  .avatar {
+    margin-right: 10px;
+  }
 </style>
