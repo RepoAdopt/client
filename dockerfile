@@ -9,4 +9,3 @@ FROM nginx as production-stage
 RUN mkdir -p /repoadopt/app
 COPY --from=build-stage /repoadopt/app/dist /repoadopt/app
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=build_stage /
