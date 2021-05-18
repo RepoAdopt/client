@@ -7,7 +7,7 @@
             <b>{{ repository }}</b>
           </h1>
         </el-col>
-        <el-col :span="6" v-if="showButton">
+        <el-col :span="6" v-if="show_match_button">
           <el-row type="flex" justify="end">
             <el-button type="primary" @click="toggleMatch">
               {{ match ? "Unmatch" : "Match" }}
