@@ -26,10 +26,10 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "/mymatches",
         name: "MyMatches",
-        component: {
+        components: {
           default: MatchedAdoptables,
           leftView: OwnRepositories,
-        },
+        }
       },
       {
         path: "/adoptablechat/:id",
