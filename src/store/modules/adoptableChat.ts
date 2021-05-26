@@ -46,6 +46,7 @@ const getters = {
 const actions = {
   init(root: Root, params: { id: string }) {
     root.commit("emptyUsers");
+    root.commit("emptyChat");
     Apollo.query({
       query: gql`
         query($adoptableId: String!) {
@@ -99,6 +100,9 @@ const mutations = {
   },
   emptyUsers(state: State) {
     state.users = [];
+  },
+  emptyChat(state: State) {
+    state.chatMessages = [];
   },
   appendUser(state: State, params: { user: User }) {
     state.users.push(params.user);
