@@ -7,7 +7,11 @@
             <el-menu-item :route="{ name: 'Dashboard' }" index="0">
               RepoAdopt
             </el-menu-item>
-            <el-menu-item :route="{ name: 'MyMatches' }" index="1" v-if="githubToken && user">
+            <el-menu-item
+              :route="{ name: 'MyMatches' }"
+              index="1"
+              v-if="githubToken && user"
+            >
               My matches
             </el-menu-item>
           </el-row>
@@ -37,6 +41,9 @@
               <el-dropdown-menu>
                 <el-dropdown-item @click="logout()">
                   Logout
+                </el-dropdown-item>
+                <el-dropdown-item @click="exportMyData">
+                  Export my data
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -118,6 +125,12 @@
     methods: {
       ...mapActions("user", ["init", "logout"]),
       ...mapActions("ownAdoptables", ["appendAdoptable"]),
+      exportMyData() {
+        showSuccess(
+          "Export data",
+          `Data is being exported and will be send to ${this.user.email}`,
+        );
+      },
       createAdoptable: function() {
         apollo
           .mutate({
