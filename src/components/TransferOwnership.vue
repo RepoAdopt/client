@@ -19,6 +19,7 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <p>Warning: Once a repository is transfered it can not be undone</p>
       <el-form-item :label="`Type ${repository} for confirmation`">
         <el-input v-model="request.confirmation" />
       </el-form-item>
@@ -27,8 +28,8 @@
       <el-button @click="dialogOpen = false">
         Cancel
       </el-button>
-      <el-button type="primary">
-        Save
+      <el-button type="primary" @click="transfer">
+        Transfer
       </el-button>
     </template>
   </el-dialog>
@@ -38,15 +39,17 @@
   import { defineComponent } from "vue";
   import { mapGetters } from "vuex";
 
+  import { showError, showSuccess } from "./notifications";
+
   export default defineComponent({
     name: "TransferOwnership",
     props: {
       users: {
         type: Array,
       },
-			repository: {
-				type: String
-			}
+      repository: {
+        type: String,
+      },
     },
     computed: {
       ...mapGetters("user", ["githubToken", "user"]),
@@ -56,6 +59,22 @@
         request: { newOwner: null, confirmation: "" },
         dialogOpen: false,
       };
+    },
+    methods: {
+      transfer() {
+        if (this.request.newOwner === null) {
+          showError("New owner", "Please select the new owner");
+          return;
+        }
+
+        if (this.request.confirmation !== this.repository) {
+          showError("Confirmation", "The confirmation is incorrect");
+          return;
+        }
+
+        this.dialogOpen = false;
+        showSuccess("Transfer", "Transfer request has been made");
+      },
     },
   });
 </script>

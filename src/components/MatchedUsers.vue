@@ -3,7 +3,7 @@
     <template #header>
       <el-row type="flex" justify="space-between">
         <h1>People</h1>
-        <TransferOwnership :users="users"  />
+        <TransferOwnership :users="users" :repository="adoptable.repository" />
       </el-row>
     </template>
     <li v-for="(user, index) in users" :key="`message:${index}-${user}`">
@@ -31,7 +31,7 @@
     props: ["id"],
     components: { TransferOwnership },
     computed: {
-      ...mapGetters("adoptableChat", ["users"]),
+      ...mapGetters("adoptableChat", ["users", "adoptable"]),
     },
     methods: {
       OpenUrlInNewTab(url) {
