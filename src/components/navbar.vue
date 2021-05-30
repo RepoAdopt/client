@@ -7,7 +7,11 @@
             <el-menu-item :route="{ name: 'Dashboard' }" index="0">
               RepoAdopt
             </el-menu-item>
-            <el-menu-item :route="{ name: 'MyMatches' }" index="1" v-if="githubToken && user">
+            <el-menu-item
+              :route="{ name: 'MyMatches' }"
+              index="1"
+              v-if="githubToken && user"
+            >
               My matches
             </el-menu-item>
           </el-row>
@@ -38,6 +42,9 @@
                 <el-dropdown-item @click="logout()">
                   Logout
                 </el-dropdown-item>
+                <el-dropdown-item @click="removeMyDataDialog = true">
+                  Remove my data
+                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -45,6 +52,26 @@
       </el-row>
     </el-menu>
   </el-header>
+  <el-dialog v-model="removeMyDataDialog" title="Remove my data" center>
+    <el-form :model="removeDataForm">
+      <p>
+        Warning: Your data will be removed and can not be restored afterwards.
+        Adoptables, matches etc. will be removed. Note: Comment will be made
+        anonymous.
+        <el-form-item :label="`Type ${user.login} for confirmation`">
+          <el-input v-model="removeDataForm.confirmation" />
+        </el-form-item></p
+    ></el-form>
+
+    <template #footer>
+      <el-button @click="dialogOpen = false">
+        Cancel
+      </el-button>
+      <el-button type="primary" @click="removeMyData">
+        Remove my data
+      </el-button>
+    </template>
+  </el-dialog>
   <el-dialog v-model="dialogFormVisible" title="Add Adoptable" center>
     <el-form :model="form">
       <el-form-item label="Repository" :label-width="formLabelWidth" required>
@@ -100,6 +127,10 @@
           description: "",
         },
         formLabelWidth: "120px",
+        removeMyDataDialog: false,
+        removeDataForm: {
+          confirmation: "",
+        },
       };
     },
     computed: {
@@ -118,6 +149,15 @@
     methods: {
       ...mapActions("user", ["init", "logout"]),
       ...mapActions("ownAdoptables", ["appendAdoptable"]),
+      removeMyData() {
+        if (this.removeDataForm.confirmation !== this.user.login) {
+          showError("Confirmation", "The confirmation is incorrect");
+          return;
+        }
+
+        this.removeMyDataDialog = false;
+        showSuccess("Remove data", "Your data is being removed");
+      },
       createAdoptable: function() {
         apollo
           .mutate({
