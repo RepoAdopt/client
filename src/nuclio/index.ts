@@ -9,11 +9,13 @@ function defaultHeaders() {
 }
 
 function getAddress(port: number) {
+	// @ts-ignore: config does exist
   return `http://${window.config.VUE_APP_NUCLIO_HOST}:${port}/`;
 }
 
 async function getPortForFunction(functionName: string) {
   const res = await (
+		// @ts-ignore: config does exist
     await fetch(getAddress(window.config.VUE_APP_NUCLIO_PORT) + "api/functions")
   ).json();
 
