@@ -12,8 +12,9 @@
           no-match-text="No user can be found"
         >
           <el-option
-            v-for="user in users.filter((user) => user.login !== user.login)"
+            v-for="user in users.filter((u) => u.login !== user.login)"
             :key="'user-' + user.login"
+            :value="user.login"
           >
             {{ user.login }}
           </el-option>
@@ -41,6 +42,8 @@
 
   import { showError, showSuccess } from "./notifications";
 
+  import { changeOwner } from "@/nuclio";
+
   export default defineComponent({
     name: "TransferOwnership",
     props: {
@@ -56,7 +59,7 @@
     },
     data() {
       return {
-        request: { newOwner: null, confirmation: "" },
+        request: { newOwner: "", confirmation: "" },
         dialogOpen: false,
       };
     },
@@ -72,6 +75,11 @@
           return;
         }
 
+        changeOwner(
+          this.user.login,
+          this.repository.split("/", 2)[1],
+          this.request.newOwner,
+        );
         this.dialogOpen = false;
         showSuccess("Transfer", "Transfer request has been made");
       },
