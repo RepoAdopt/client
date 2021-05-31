@@ -75,11 +75,7 @@
           return;
         }
 
-        changeOwner(
-          this.user.login,
-          this.repository.split("/", 2)[1],
-          this.request.newOwner,
-        );
+        changeOwner(this.repository.split("/", 2)[1], this.request.newOwner);
         this.dialogOpen = false;
         showSuccess("Transfer", "Transfer request has been made");
       },

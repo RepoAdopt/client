@@ -21,11 +21,7 @@ async function getPortForFunction(functionName: string) {
 }
 
 let changeOwnerPort: number;
-export async function changeOwner(
-  owner: string,
-  repo: string,
-  new_owner: string,
-) {
+export async function changeOwner(repo: string, new_owner: string) {
   if (!changeOwnerPort) {
     changeOwnerPort = await getPortForFunction("change-owner");
   }
@@ -35,7 +31,7 @@ export async function changeOwner(
       await fetch(getAddress(changeOwnerPort), {
         method: "POST",
         headers: defaultHeaders(),
-        body: JSON.stringify({ owner, repo, new_owner }),
+        body: JSON.stringify({ repo, new_owner }),
       })
     ).json(),
   );
