@@ -128,6 +128,7 @@
                   description: $description
                 ) {
                   adoptable {
+                    id
                     repository
                     description
                   }
