@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 import Store from "@/store";
 
@@ -16,8 +16,8 @@ function getAddress(port: number) {
 }
 
 async function getPortForFunction(functionName: string) {
-  const res = await // @ts-ignore: config does exist
-  (
+  const res = await 
+  ( // @ts-ignore: config does exist
     await fetch(getAddress(window.config.VUE_APP_NUCLIO_PORT) + "api/functions")
   ).json();
 
@@ -31,9 +31,9 @@ export async function changeOwner(repo: string, new_owner: string) {
   }
 
   console.log(
-    await axios.post(getAddress(changeOwnerPort),{
+    await axios.post(getAddress(changeOwnerPort), {
       headers: defaultHeaders(),
       body: JSON.stringify({ repo, new_owner }),
-    })
+    }),
   );
 }
