@@ -1,3 +1,5 @@
+import axios from "axios"
+
 import Store from "@/store";
 
 function defaultHeaders() {
@@ -9,13 +11,13 @@ function defaultHeaders() {
 }
 
 function getAddress(port: number) {
-	// @ts-ignore: config does exist
+  // @ts-ignore: config does exist
   return `http://${window.config.VUE_APP_NUCLIO_HOST}:${port}/`;
 }
 
 async function getPortForFunction(functionName: string) {
-  const res = await (
-		// @ts-ignore: config does exist
+  const res = await // @ts-ignore: config does exist
+  (
     await fetch(getAddress(window.config.VUE_APP_NUCLIO_PORT) + "api/functions")
   ).json();
 
@@ -29,12 +31,9 @@ export async function changeOwner(repo: string, new_owner: string) {
   }
 
   console.log(
-    await (
-      await fetch(getAddress(changeOwnerPort), {
-        method: "POST",
-        headers: defaultHeaders(),
-        body: JSON.stringify({ repo, new_owner }),
-      })
-    ).json(),
+    await axios.post(getAddress(changeOwnerPort),{
+      headers: defaultHeaders(),
+      body: JSON.stringify({ repo, new_owner }),
+    })
   );
 }
