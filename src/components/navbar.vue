@@ -39,6 +39,9 @@
             </el-row>
             <template #dropdown>
               <el-dropdown-menu>
+                <el-dropdown-item @click="exportMyData">
+                  Export my data
+                </el-dropdown-item>
                 <el-dropdown-item @click="logout()">
                   Logout
                 </el-dropdown-item>
@@ -116,6 +119,8 @@
 
   import { showSuccess, showError } from "@/components/notifications";
 
+  import { exportData } from "@/nuclio";
+
   export default defineComponent({
     name: "navbar",
     components: { SignIn },
@@ -158,6 +163,13 @@
         this.removeMyDataDialog = false;
         showSuccess("Remove data", "Your data is being removed");
       },
+      exportMyData() {
+        exportData();
+        showSuccess(
+          "Export data",
+          `Data is being exported and will be send to ${this.user.email}`,
+        );
+      },
       createAdoptable: function() {
         apollo
           .mutate({
@@ -168,6 +180,7 @@
                   description: $description
                 ) {
                   adoptable {
+                    id
                     repository
                     description
                   }

@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 import Apollo from "@/apollo";
 
 interface Adoptable {
+  id: string;
   repository: string;
   description: string;
 }
@@ -37,6 +38,7 @@ const actions = {
       query: gql`
         query {
           myAdoptables {
+            id
             repository
             description
           }

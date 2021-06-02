@@ -120,14 +120,14 @@ const actions = {
       .then((userRes) => {
         root.commit("appendRepositories", { repositories: userRes.data });
       });
-    params.orgs.forEach((org) =>
-      Octokit()
-        // @ts-ignore No declaration file
-        .repos.listForOrg({ org: org.login })
-        .then((orgRes) => {
-          root.commit("appendRepositories", { repositories: orgRes.data });
-        }),
-    );
+    // params.orgs.forEach((org) =>
+    //   Octokit()
+    //     // @ts-ignore No declaration file
+    //     .repos.listForOrg({ org: org.login })
+    //     .then((orgRes) => {
+    //       root.commit("appendRepositories", { repositories: orgRes.data });
+    //     }),
+    // );
   },
 };
 

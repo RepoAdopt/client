@@ -12,7 +12,9 @@
         v-for="(adoptable, index) in filteredList"
         :key="`adoptable:${index}-${adoptable.repository}`"
       >
-        <h2>{{ adoptable.repository }}</h2>
+        <h2 v-on:click="goToAdoptableChat(adoptable)">
+          {{ adoptable.repository }}
+        </h2>
       </li>
     </ul>
   </el-col>
@@ -36,6 +38,14 @@
           return adoptable.repository
             .toLowerCase()
             .includes(this.search.toLowerCase());
+        });
+      },
+    },
+    methods: {
+      goToAdoptableChat: function(adoptable) {
+        this.$router.push({
+          name: "AdoptableChat",
+          params: { id: adoptable.id },
         });
       },
     },
