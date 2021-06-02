@@ -52,3 +52,18 @@ export async function exportData() {
     },
   );
 }
+
+let deleteDataPort: number;
+export async function deleteData() {
+  if (!deleteDataPort) {
+    deleteDataPort = await getPortForFunction("delete-data");
+  }
+
+  await axios.post(
+    getAddress(deleteDataPort),
+    {},
+    {
+      headers: defaultHeaders(),
+    },
+  );
+}

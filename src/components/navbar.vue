@@ -42,11 +42,11 @@
                 <el-dropdown-item @click="exportMyData">
                   Export my data
                 </el-dropdown-item>
-                <el-dropdown-item @click="logout()">
-                  Logout
-                </el-dropdown-item>
                 <el-dropdown-item @click="removeMyDataDialog = true">
                   Remove my data
+                </el-dropdown-item>
+                <el-dropdown-item @click="logout()">
+                  Logout
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -119,7 +119,7 @@
 
   import { showSuccess, showError } from "@/components/notifications";
 
-  import { exportData } from "@/nuclio";
+  import { exportData, deleteData } from "@/nuclio";
 
   export default defineComponent({
     name: "navbar",
@@ -154,14 +154,17 @@
     methods: {
       ...mapActions("user", ["init", "logout"]),
       ...mapActions("ownAdoptables", ["appendAdoptable"]),
-      removeMyData() {
+      async removeMyData() {
         if (this.removeDataForm.confirmation !== this.user.login) {
           showError("Confirmation", "The confirmation is incorrect");
           return;
         }
 
         this.removeMyDataDialog = false;
+        await deleteData();
+        this.logout()
         showSuccess("Remove data", "Your data is being removed");
+        
       },
       exportMyData() {
         exportData();
