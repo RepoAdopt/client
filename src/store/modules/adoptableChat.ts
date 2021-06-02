@@ -3,6 +3,8 @@ import gql from "graphql-tag";
 import Apollo from "@/apollo";
 import Octokit from "@/octokit";
 
+import { Adoptable, getReadme, getUrl } from "./adoptables";
+
 export interface ChatMessage {
   message: string;
   user: string;
@@ -17,6 +19,7 @@ interface State {
   chatMessages: Array<ChatMessage>;
   chatId: number;
   users: Array<User>;
+  adoptable: Adoptable;
 }
 
 interface Root {
@@ -29,6 +32,7 @@ const state = {
   chatMessages: [],
   chatId: 0,
   users: [],
+  adoptable: {},
 };
 
 const getters = {
@@ -41,11 +45,15 @@ const getters = {
   chatId: (state: State) => {
     return state.chatId;
   },
+  adoptable: (state: State) => {
+    return state.adoptable;
+  },
 };
 
 const actions = {
   init(root: Root, params: { id: string }) {
     root.commit("emptyUsers");
+    root.commit("emptyChat");
     Apollo.query({
       query: gql`
         query($adoptableId: String!) {
@@ -56,6 +64,12 @@ const actions = {
               user
               message
             }
+            adoptable {
+              id
+              description
+              repository
+              owner
+            }
           }
         }
       `,
@@ -64,13 +78,21 @@ const actions = {
       },
     })
       .then((result) => {
+        const { id, chatMessages, users, adoptable } = result.data.chat;
         root.commit("setChatId", {
-          chatId: result.data.chat.id,
+          chatId: id,
         });
         root.commit("setChatMessages", {
-          chatMessages: result.data.chat.chatMessages,
+          chatMessages,
         });
-        result.data.chat.users.forEach(function(username: string) {
+        getUrl(adoptable, function(adoptableWithUrl) {
+          getReadme(adoptableWithUrl, function(adoptableWithReadme) {
+            root.commit("setAdoptable", {
+              adoptable: adoptableWithReadme,
+            });
+          });
+        });
+        users.forEach(function(username: string) {
           Octokit()
             .users.getByUsername({ username })
             .then((response) => {
@@ -81,7 +103,7 @@ const actions = {
         });
       })
       .catch((result) => {
-        console.log(result);
+        console.error(result);
       });
   },
 
@@ -94,11 +116,17 @@ const mutations = {
   setChatMessages(state: State, params: { chatMessages: ChatMessage[] }) {
     state.chatMessages = params.chatMessages;
   },
+  setAdoptable(state: State, params: { adoptable: Adoptable }) {
+    state.adoptable = params.adoptable;
+  },
   setChatId(state: State, params: { chatId: number }) {
     state.chatId = params.chatId;
   },
   emptyUsers(state: State) {
     state.users = [];
+  },
+  emptyChat(state: State) {
+    state.chatMessages = [];
   },
   appendUser(state: State, params: { user: User }) {
     state.users.push(params.user);

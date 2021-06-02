@@ -20,7 +20,7 @@
     name: "SignIn",
     data() {
       return {
-        link: `https://github.com/login/oauth/authorize?scope=user:email&client_id=${returnClientId()}`,
+        link: `https://github.com/login/oauth/authorize?scope=user:email%20public_repo&client_id=${returnClientId()}`,
       };
     },
   });

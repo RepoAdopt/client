@@ -1,50 +1,31 @@
 <template>
-  <li
-      v-for="(adoptable, index) in adoptables.map(
-        (match) => match.adoptable,
-      )"
-      :key="`adoptable:${index}-${adoptable.id}`"
-  >
-    <Adoptable v-if="adoptable.id === id"
-        :id="adoptable.id"
-        :repository="adoptable.repository"
-        :description="adoptable.description"
-        :readme="adoptable.readme"
-        :html_url="adoptable.html_url"
-        :show_match_button="false"
-    />
-  </li>
-
+  <!-- Here
+  {{ adoptable?.id }} -->
+  <Adoptable
+    v-if="adoptable?.id"
+    :id="adoptable.id"
+    :repository="adoptable.repository"
+    :description="adoptable.description"
+    :readme="adoptable.readme"
+    :html_url="adoptable.html_url"
+    :show_match_button="false"
+  />
 </template>
 
 <script>
-
-  import {mapGetters} from "vuex";
+  import { mapGetters } from "vuex";
   import Adoptable from "@/components/Adoptable";
 
   export default {
     name: "CurrentAdoptableChat",
     components: { Adoptable },
-    data() {
-      return {
-        adoptables: [],
-      };
+    computed: {
+      ...mapGetters("adoptableChat", ["adoptable"]),
     },
     props: {
       id: {
         type: String,
       },
     },
-    computed: {
-      ...mapGetters("mymatches", ["matches"]),
-    },
-    watch: {
-      matches: function(match) {
-        this.adoptables = match;
-      },
-    },
-    created() {
-      this.adoptables = this.matches;
-    },
-  }
+  };
 </script>

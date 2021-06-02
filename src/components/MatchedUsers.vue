@@ -1,15 +1,19 @@
 <template>
-
   <el-card>
     <template #header>
-    <h1>People</h1>
+      <el-row type="flex" justify="space-between">
+        <h1>People</h1>
+        <TransferOwnership :users="users" :repository="adoptable.repository" />
+      </el-row>
     </template>
-    <li
-        v-for="(user, index) in users"
-        :key="`message:${index}-${user}`"
-    >
-      <el-divider v-if="index !== 0"/>
-      <el-row align="middle" type="flex" v-on:click="OpenUrlInNewTab(user.html_url)" class="clickable">
+    <li v-for="(user, index) in users" :key="`message:${index}-${user}`">
+      <el-divider v-if="index !== 0" />
+      <el-row
+        align="middle"
+        type="flex"
+        v-on:click="OpenUrlInNewTab(user.html_url)"
+        class="clickable"
+      >
         <el-avatar class="avatar" :src="user.avatar_url" />
         {{ user.login }}
       </el-row>
@@ -18,23 +22,23 @@
 </template>
 
 <script>
+  import { mapGetters } from "vuex";
 
-import {mapGetters} from "vuex";
+  import TransferOwnership from "./TransferOwnership.vue";
 
-export default {
-  name: "MatchedUsers",
-  props: [
-      "id"
-  ],
-  computed: {
-    ...mapGetters("adoptableChat", ["users"]),
-  },
-  methods: {
-    OpenUrlInNewTab(url) {
-      window.open(url)
-    }
-  }
-}
+  export default {
+    name: "MatchedUsers",
+    props: ["id"],
+    components: { TransferOwnership },
+    computed: {
+      ...mapGetters("adoptableChat", ["users", "adoptable"]),
+    },
+    methods: {
+      OpenUrlInNewTab(url) {
+        window.open(url);
+      },
+    },
+  };
 </script>
 
 <style scoped>
