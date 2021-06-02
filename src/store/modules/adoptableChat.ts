@@ -103,7 +103,7 @@ const actions = {
         });
       })
       .catch((result) => {
-        console.log(result);
+        console.error(result);
       });
   },
 
