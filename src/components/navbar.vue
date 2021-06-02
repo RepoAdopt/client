@@ -39,11 +39,11 @@
             </el-row>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click="logout()">
-                  Logout
-                </el-dropdown-item>
                 <el-dropdown-item @click="exportMyData">
                   Export my data
+                </el-dropdown-item>
+                <el-dropdown-item @click="logout()">
+                  Logout
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -96,6 +96,8 @@
 
   import { showSuccess, showError } from "@/components/notifications";
 
+  import { exportData } from "@/nuclio";
+
   export default defineComponent({
     name: "navbar",
     components: { SignIn },
@@ -126,6 +128,7 @@
       ...mapActions("user", ["init", "logout"]),
       ...mapActions("ownAdoptables", ["appendAdoptable"]),
       exportMyData() {
+        exportData();
         showSuccess(
           "Export data",
           `Data is being exported and will be send to ${this.user.email}`,
