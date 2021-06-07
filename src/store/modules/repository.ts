@@ -120,6 +120,7 @@ const actions = {
       .then((userRes) => {
         root.commit("appendRepositories", { repositories: userRes.data });
       });
+    // Keep this in, when organisation repositories can be transfered uncomment this.
     // params.orgs.forEach((org) =>
     //   Octokit()
     //     // @ts-ignore No declaration file

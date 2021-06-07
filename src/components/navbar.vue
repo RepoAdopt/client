@@ -42,6 +42,9 @@
                 <el-dropdown-item @click="exportMyData">
                   Export my data
                 </el-dropdown-item>
+                <el-dropdown-item @click="removeMyDataDialog = true">
+                  Remove my data
+                </el-dropdown-item>
                 <el-dropdown-item @click="logout()">
                   Logout
                 </el-dropdown-item>
@@ -52,6 +55,26 @@
       </el-row>
     </el-menu>
   </el-header>
+  <el-dialog v-model="removeMyDataDialog" title="Remove my data" center>
+    <el-form :model="removeDataForm">
+      <p>
+        Warning: Your data will be removed and can not be restored afterwards.
+        Adoptables, matches etc. will be removed. Note: Comment will be made
+        anonymous.
+        <el-form-item :label="`Type ${user.login} for confirmation`">
+          <el-input v-model="removeDataForm.confirmation" />
+        </el-form-item></p
+    ></el-form>
+
+    <template #footer>
+      <el-button @click="dialogOpen = false">
+        Cancel
+      </el-button>
+      <el-button type="primary" @click="removeMyData">
+        Remove my data
+      </el-button>
+    </template>
+  </el-dialog>
   <el-dialog v-model="dialogFormVisible" title="Add Adoptable" center>
     <el-form :model="form">
       <el-form-item label="Repository" :label-width="formLabelWidth" required>
@@ -96,7 +119,7 @@
 
   import { showSuccess, showError } from "@/components/notifications";
 
-  import { exportData } from "@/nuclio";
+  import { exportData, deleteData } from "@/nuclio";
 
   export default defineComponent({
     name: "navbar",
@@ -109,6 +132,10 @@
           description: "",
         },
         formLabelWidth: "120px",
+        removeMyDataDialog: false,
+        removeDataForm: {
+          confirmation: "",
+        },
       };
     },
     computed: {
@@ -127,11 +154,23 @@
     methods: {
       ...mapActions("user", ["init", "logout"]),
       ...mapActions("ownAdoptables", ["appendAdoptable"]),
+      async removeMyData() {
+        if (this.removeDataForm.confirmation !== this.user.login) {
+          showError("Confirmation", "The confirmation is incorrect");
+          return;
+        }
+
+        this.removeMyDataDialog = false;
+        await deleteData();
+        this.logout()
+        showSuccess("Remove data", "Your data is being removed");
+        
+      },
       exportMyData() {
         exportData();
         showSuccess(
           "Export data",
-          `Data is being exported and will be send to ${this.user.email}`,
+          `Data is being exported and will be sent to ${this.user.email}`,
         );
       },
       createAdoptable: function() {
