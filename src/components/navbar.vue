@@ -170,7 +170,7 @@
         exportData();
         showSuccess(
           "Export data",
-          `Data is being exported and will be send to ${this.user.email}`,
+          `Data is being exported and will be sent to ${this.user.email}`,
         );
       },
       createAdoptable: function() {
